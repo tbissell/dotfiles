@@ -3,9 +3,7 @@
 # Show what we are doing
 set -x
 
-# Update vundle sub-module
-git submodule init
-git submodule update
+git clone https://github.com/VundleVim/Vundle.vim bundle/Vundle.vim
 
 # Unlink vundle checkout from specific checkout
 # to the master branch
