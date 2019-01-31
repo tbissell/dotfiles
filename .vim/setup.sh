@@ -3,17 +3,21 @@
 # Show what we are doing
 set -x
 
-if [ ! -d "bundle/Vundle.vim" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim bundle/Vundle.vim
-else
-    pushd bundle/Vundle.vim
-    git pull
-    popd
-fi
+CMD_PATH="$(dirname "$(readlink -f "$0")")"
 
-if [ ! -e "$HOME/.vimrc" ]; then
-    ln -sv .vim/vimrc ~/.vimrc
-fi
+pushd "$CMD_PATH"
+    if [ ! -d "bundle/Vundle.vim" ]; then
+        git clone https://github.com/VundleVim/Vundle.vim bundle/Vundle.vim
+    else
+        pushd bundle/Vundle.vim
+        git pull
+        popd
+    fi
 
-# Start vim and trigger Vundle to pull updates
-vim +PluginInstall +qall
+    if [ ! -e "$HOME/.vimrc" ]; then
+        ln -sv .vim/vimrc ~/.vimrc
+    fi
+
+    # Start vim and trigger Vundle to pull updates
+    vim +PluginInstall +qall
+popd
