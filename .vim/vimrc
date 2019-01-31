@@ -1,0 +1,327 @@
+" vim: foldlevel=0:fdm=marker
+"
+"{{{1 Vundle startup
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'kien/ctrlp.vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
+Plugin 'scrooloose/nerdtree'
+Plugin 'vim-scripts/perlomni.vim'
+"Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'vim-airline/vim-airline',
+Plugin 'vim-airline/vim-airline-themes',
+"Plugin 'vim-scripts/ShowMarks'
+Plugin 'tpope/vim-surround'
+Plugin 'scrooloose/syntastic'
+Plugin 'godlygeek/tabular'
+Plugin 'majutsushi/tagbar'
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-rails'
+Plugin 'mattn/emmet-vim'
+Plugin 'keithbsmiley/rspec.vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'honza/vim-snippets'
+Plugin 'jceb/vim-orgmode'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-speeddating'
+Plugin 'jgdavey/tslime.vim'
+Plugin 'tpope/vim-repeat'
+
+call vundle#end()
+
+set runtimepath^=~/.vim/bundle/orgmodem
+
+" set airline theme
+let g:airline_theme='distinguished'
+
+"{{{1 General Options
+autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
+set nocompatible
+filetype plugin indent on
+
+set showmode
+set showcmd
+set ttyfast
+set cursorline
+set lazyredraw
+
+set t_Co=256                            " Force 256 color
+set foldcolumn=3                        " fold column width
+set foldmethod=manual                   " method for folks, I change this sometimes
+syn on                                  " Enable syntax highlighting
+set ai                                  " Enable auto-indent
+
+set ts=4                                " set tabstop
+set softtabstop=4                       " tab size for functions
+set shiftwidth=4                        " spaces used for auto-indents
+set shiftround                          " round indent to multiple of shiftwidth
+set expandtab                           " spaces, not tabs
+set modeline                            " enable modeline parsing
+set modelines=2
+set showbreak=└
+set splitbelow                          " new splits below current
+set splitright                          " new splits on right
+set autoread                            " autoread modified files
+set title
+set scrolloff=3                         " keep 3 lines below cursor
+
+set nobackup                            " disable backups
+set nowritebackup                       " do not use backup when writing
+set noswapfile                          " disable swap files
+
+set nowrap                              " do not wrap long lines
+set smartindent                         " enable clever auto-indenting
+set number                              " enable line number column
+set hls                                 " enable search highlights
+set hidden                              " do not 'hide' buffers
+set showmatch                           " show matching braces
+set laststatus=2                        " always show status line
+
+set wildmenu                            " better completion display
+"set wildmode=list:longest
+
+set wildignore+=.hg,.git,.svn
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest
+set wildignore+=*.pyc
+
+let loaded_matchparen = 1
+let perl_fold = 1
+
+"{{{1 Binding options
+" loading for interfaces
+nmap <Leader>nt :NERDTree<cr>
+nmap <Leader>tl :TagbarToggle<cr>
+
+" fugitive shortcuts
+nmap <Leader>gc :Gcommit<cr>
+nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gd :Gdiff<cr>
+nmap <Leader>gl :copen<cr>:Glog<cr>
+nmap <Leader>gb :Gblame<cr>
+
+" Quick tab movement
+nmap <Leader>tn :tabnext<cr>
+nmap <Leader>tp :tabprev<cr>
+nmap <Leader>tc :tabnew<cr>
+
+" My own handy shortcuts
+nmap <Leader>t :tabnew<cr>
+nmap <Leader>u :!perl ~/.vim/update-plugins.pl<cr>
+nmap <silent><leader>f :set number!<cr>:call FoldColumnToggle()<cr>
+nmap <Leader>ll :lopen<cr>
+
+" Quick bc-based calc
+vnoremap ;bc "ey:call CalcBC()<cr>
+
+" Quicksave -- disabled, never use it
+" noremap <C-s> :update<CR>
+
+" Quick sort -- don't use it much, disabled
+"vnoremap <Leader>s :sort<cr>
+
+" Re-map snippets to C-l, YouCompleteMe uses Tab
+imap <C-l> <Plug>snipMateNextOrTrigger
+smap <C-l> <Plug>snipMateNextOrTrigger
+
+" Quick indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Focus folding
+nnoremap <leader>z zMzvzz
+
+" Quick function completion
+inoremap <c-]> <c-x><c-]>
+inoremap <c-f> <c-x><c-f>
+
+" Bracket pairing
+inoremap {<CR> {<CR>}<Esc>O
+" Clear matches
+noremap <leader><space> :noh<cr>
+
+" Quick-fix grep listing
+nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g **/*'<cr>:copen<cr>:cc<cr>
+
+" Quick fix list next/prev
+nnoremap <c-j> :cnext<cr>
+nnoremap <c-k> :cprev<cr>
+
+" trailing whitespace wipe
+nnoremap <leader>w :%s/[ ]*$//<cr>:noh<cr>
+
+" Run the file being edited
+nmap <leader>r :!./%<cr>
+au BufNewFile,BufRead *.sh nmap <leader>r :execute Readshell("bash", expand("%"))<cr>
+au BufNewFile,BufRead *.rb nmap <leader>r :execute Readshell("ruby", expand("%"))<cr>
+au BufNewFile,BufRead *.sh nmap <leader>R :execute '!bash '. expand("%")<cr>
+au BufNewFile,BufRead *.rb nmap <leader>R :execute '!ruby '. expand("%")<cr>
+
+" better regex's
+nnoremap / /\v
+vnoremap / /\v
+
+"{{{1 Color/UI options
+if has('gui_running')
+    set guioptions-=T
+    set guioptions-=m
+    colors darkspectrum
+    set gfn=Monospace\ 9
+    " Disable scrollbars
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=b
+else
+    colors clearview
+
+    hi FoldColumn guifg=cyan guibg=NONE
+    hi FoldColumn ctermfg=cyan ctermbg=NONE
+    hi Folded ctermbg=NONE ctermfg=white
+
+    " Fix showmarks colors
+    hi ShowMarksHLl ctermfg=white ctermbg=blue
+    hi ShowMarksHLu ctermfg=white ctermbg=blue
+    hi ShowMarksHLo ctermfg=white ctermbg=blue
+    hi ShowMarksHLm ctermfg=white ctermbg=blue
+
+    let showmarks_enable = 0
+endif
+
+" Highlight long line marker
+set colorcolumn=80
+highlight ColorColumn ctermbg=233 guibg=grey15
+
+"" Search highlight color
+"highlight Search ctermfg=NONE ctermbg=237
+"
+"" Tone down line number column
+"highlight LineNr ctermfg=darkgrey
+"
+"" vimdiff highlights, because they ***SUCK*** by default
+"hi DiffAdd ctermfg=white ctermbg=blue
+"hi DiffDelete ctermfg=red ctermbg=black
+"hi DiffChange ctermfg=blue ctermbg=white
+"
+"" fix terrible color of completion popup
+"hi Pmenu ctermbg=238
+
+" highlight whitespaces
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+"{{{1 Plugin settings
+"{{{2 Pathogen
+"call pathogen#infect()
+"call pathogen#helptags()
+
+"{{{2 Evervim
+" Fill in your own dev token, get one from here: https://www.evernote.com/api/DeveloperToken.action
+" Must have +python build of vim
+"source ~/.vimrc-evervim
+
+"{{{2 Powerline
+let g:Powerline_theme = 'default'
+"let g:Powerline_symbols = 'fancy'
+
+"{{{2 Taglist
+let Tlist_Use_Right_Window = 1
+
+"{{{2 orgmode
+
+" Set Todo color for orgmode
+highlight Todo ctermfg=yellow ctermbg=NONE
+
+" Extra todo states
+let g:org_todo_keywords = ['TODO(t)', 'STARTED(s)', 'WAITING(w)', '|', 'DONE(d)', 'REJECTED(r)']
+
+"{{{2 Easytags
+let g:easytags_dynamic_files = 1
+let g:easytags_suppress_ctags_warning = 1
+"{{{2 Syntastic
+let g:syntastic_perl_checkers = ['perl', 'podchecker']
+let g:syntastic_enable_perl_checker = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+"{{{2 tslime
+vmap <C-c><C-c> <Plug>SendSelectionToTmux
+nmap <C-c><C-c> <Plug>NormalModeSendToTmux
+let g:tslime_always_current_session = 1
+"{{{2 airline
+let g:airline_powerline_fonts = 1
+"{{{1 Helper functions
+"{{{2 functions
+" toggle function for foldcolumn
+function! FoldColumnToggle()
+    if &foldcolumn
+        setlocal foldcolumn=0
+        GitGutterSignsDisable
+    else
+        setlocal foldcolumn=3
+        GitGutterSignsEnable
+    endif
+endfunction
+
+function! Readshell(cmd, buffer_fname)
+    "let buffer_fname=expand("%")
+    split
+    enew
+    setl buftype=nofile bufhidden=wipe nobuflisted
+    execute 'read !'. a:cmd .' ' . a:buffer_fname
+endfunction
+" au BufNewFile,BufRead *.rb nmap <leader>r let buffer_fname=expand("%")<cr>:new<cr>:execute 'read !ruby '. buffer_fname<cr>
+
+" quick bc calc
+function! CalcBC()
+    let has_equal = 0
+    let @e = substitute (@e, "\n", "", "g")
+    let @e = substitute (@e, '\s*$', "", "g")
+    if @e =~ "=$"
+        let @e = substitute (@e, '=$', "", "")
+        let has_equal = 1
+    endif
+
+    let @e = substitute (@e, '\csin\s*(', "s (", "")
+    let @e = substitute (@e, '\ccos\s*(', "c (", "")
+    let @e = substitute (@e, '\catan\s*(', "a (", "")
+    let @e = substitute (@e, '\cln\s*(', "l (", "")
+
+    let @e = escape (@e, '*()')
+
+    let answer = substitute(system("echo " . @e . "\| bc -l"), "\n", "", "")
+
+    if has_equal == 1
+        normal `>
+        exec "normal a" . answer
+    else
+        echo "answer = ". answer
+    endif
+endfunction
+"{{{2 autos
+" Quick-edit w/ warning when swap exists
+"augroup NoSimultaneousEdits
+"    autocmd!
+"    autocmd SwapExists * let v:swapchoice = 'o'
+"    autocmd SwapExists * echomsg ErrorMsg
+"    autocmd SwapExists * echo 'Duplicate edit session (readonly)'
+"    autocmd SwapExists * echohl None
+"augroup END
+"{{{1 File type options
+au BufRead,BufNewFile *.scss set filetype=scss
+au BufRead,BufNewFile *.js.erb set filetype=eruby.js
+au BufRead,BufNewFile *.html.erb set filetype=eruby.html
+"{{{2 Perl
+au FileType perl setlocal keywordprg=perldoc\ -T\ -f
+
+" run through perltidy, only in visual mode
+au FileType perl xmap <C-t> :Tidy<cr>
+au FileType perl command! -range=% -nargs=* Tidy <line1>,<line2>!perltidy -q
+"}}}

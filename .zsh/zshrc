@@ -1,0 +1,134 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory notify prompt_subst interactive_comments
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+#zstyle :compinstall filename '/home/tbissell/.zshrc'
+
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "^[[00m"
+    bold      "^[[01m" no-bold      "^[[22m"
+    italic    "^[[03m" no-italic    "^[[23m"
+    underline "^[[04m" no-underline "^[[24m"
+    blink     "^[[05m" no-blink     "^[[25m"
+    reverse   "^[[07m" no-reverse   "^[[27m"
+)
+
+for color in {000..255}; do
+    FG[$color]="^[[38;5;${color}m"
+    BG[$color]="^[[48;5;${color}m"
+done
+# RT stuff
+[ -f ~/.zsh/creds-rt.sh ] && source ~/.zsh/creds-rt.sh
+
+# include rvm if exists
+if [ -e "~/.rvm/scripts/rvm" ]; then
+    source "~/.rvm/scripts/rvm"
+fi
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+autoload -Uz promptinit
+promptinit
+
+autoload -U colors
+colors
+
+setopt prompt_subst
+
+LG=%{$fg_bold[green]%}
+LB=%{$fg_bold[black]%}
+G=%{$fg[green]%}
+R=%{$fg[red]%}
+LR=%{$fg_bold[red]%}
+RST=%{$terminfo[sgr0]%}
+B=%{$fg_bold[blue]%}
+
+# Git prompt
+autoload -Uz vcs_info
+#zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:*' actionformats "%c %u [%s|%b|%a]"
+#zstyle ':vcs_info:git:*' formats "%c %u [%s|%b]"
+zstyle ':vcs_info:git:*' formats "$G%r$RST:$B%b $LG%m%u%c$RST"
+
+zstyle ':vcs_info:*' branchformat '%b-%r'
+zstyle ':vcs_info:*' enable git
+
+function error_check {
+    if [ $? -gt 0 ]; then
+        echo "$LR"
+    fi
+}
+function precmd {
+    vcs_info
+}
+
+RPROMPT='${vcs_info_msg_0_}'
+#PS1="$LB-$LG=${RST}${G}[ %n$LG@${RST}${G}%m $B%~ ${RST}${G}]$LB%# $RST"
+#PROMPT="$LB<${RST}$R<$LR< $RST%D{%R.%S %a %b %d}$R|$RST%~
+#$LB<${RST}$R<$LR< ${RST}%n$R@$RST%m$R|$RST H:%h J:%j 
+#$LB<${RST}$G<$LG< ${RST}"
+#PROMPT="%n$G@$RST%m$G|$RST%D{%R.%S %b %d}$G|${RST}J:%j$G|$RST%.%# "
+
+# Replacing
+#PROMPT="${B}[$RST%D{%R %b %d}$B] $RST%n$B@$RST%m$B|$RST%.%# "
+#RPROMPT="$RPROMPT J:%j E:%?$B|$RST%l$RST"
+PROMPT="$RST$LB%n$B@$RST$LB%m$B|$RST%.$B%#$RST "
+RPROMPT="${RPROMPT}${LB} E:"'$(error_check)'"%?$B|$RST$LB%D{%H:%M:%S}$RST"
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    alias ls='ls -G'
+else
+    alias ls='ls --color=auto'
+fi
+skip_global_compinit=1
+
+function zle-line-init zle-keymap-select {
+    VIMODE="${${KEYMAP/vicmd/ }/(main|viins)/-- INSERT --}"
+    zle && zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+# Remove annoying delay for ^[/
+bindkey -rpM viins '^['
+
+# Enable 256 color terms
+case "$TERM" in
+    xterm*) TERM=xterm-256color
+esac
+
+#export PERL_LOCAL_LIB_ROOT="/home/users/timb_dp/perl5";
+#export PERL_MB_OPT="--install_base /home/users/timb_dp/perl5";
+#export PERL_MM_OPT="INSTALL_BASE=/home/users/timb_dp/perl5";
+#export PERL5LIB="/home/users/timb_dp/perl5/lib/perl5/i686-linux-gnu-thread-multi-64int:/home/users/timb_dp/perl5/lib/perl5";
+#export PATH="/home/users/timb_dp/perl5/bin:$PATH";
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export LANG="en_US.UTF-8"
+unset zle_bracketed_paste
+
+EDITOR="vim"; export EDITOR;
+
+# Enable FISH style syntax highlight if available
+# arch location
+if [ -e "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+# ubuntu location
+if [ -e "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# screenfetch info, if available
+if [ -x "$(which screenfetch 2>/dev/null)" ]; then
+    screenfetch;
+fi
