@@ -3,15 +3,15 @@
 # Show what we are doing
 set -x
 
-git clone https://github.com/VundleVim/Vundle.vim bundle/Vundle.vim
+if [ ! -d "bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim bundle/Vundle.vim
+else
+    pushd bundle/Vundle.vim
+    git pull
+    popd
+fi
 
-# Unlink vundle checkout from specific checkout
-# to the master branch
-pushd bundle/Vundle.vim
-git checkout master
-popd
-
-if [ ! -e "~/.vimrc" ]; then
+if [ ! -e "$HOME/.vimrc" ]; then
     ln -sv .vim/vimrc ~/.vimrc
 fi
 
