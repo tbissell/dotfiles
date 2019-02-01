@@ -23,8 +23,6 @@ for color in {000..255}; do
     FG[$color]="^[[38;5;${color}m"
     BG[$color]="^[[48;5;${color}m"
 done
-# RT stuff
-[ -f ~/.zsh/creds-rt.sh ] && source ~/.zsh/creds-rt.sh
 
 # include rvm if exists
 if [ -e "~/.rvm/scripts/rvm" ]; then
@@ -53,9 +51,7 @@ B=%{$fg_bold[blue]%}
 
 # Git prompt
 autoload -Uz vcs_info
-#zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:*' actionformats "%c %u [%s|%b|%a]"
-#zstyle ':vcs_info:git:*' formats "%c %u [%s|%b]"
 zstyle ':vcs_info:git:*' formats "$G%r$RST:$B%b $LG%m%u%c$RST"
 
 zstyle ':vcs_info:*' branchformat '%b-%r'
@@ -70,16 +66,6 @@ function precmd {
     vcs_info
 }
 
-RPROMPT='${vcs_info_msg_0_}'
-#PS1="$LB-$LG=${RST}${G}[ %n$LG@${RST}${G}%m $B%~ ${RST}${G}]$LB%# $RST"
-#PROMPT="$LB<${RST}$R<$LR< $RST%D{%R.%S %a %b %d}$R|$RST%~
-#$LB<${RST}$R<$LR< ${RST}%n$R@$RST%m$R|$RST H:%h J:%j 
-#$LB<${RST}$G<$LG< ${RST}"
-#PROMPT="%n$G@$RST%m$G|$RST%D{%R.%S %b %d}$G|${RST}J:%j$G|$RST%.%# "
-
-# Replacing
-#PROMPT="${B}[$RST%D{%R %b %d}$B] $RST%n$B@$RST%m$B|$RST%.%# "
-#RPROMPT="$RPROMPT J:%j E:%?$B|$RST%l$RST"
 PROMPT="$RST$LB%n$B@$RST$LB%m$B|$RST%.$B%#$RST "
 RPROMPT="${RPROMPT}${LB} E:"'$(error_check)'"%?$B|$RST$LB%D{%H:%M:%S}$RST"
 
@@ -106,12 +92,6 @@ case "$TERM" in
     xterm*) TERM=xterm-256color
 esac
 
-#export PERL_LOCAL_LIB_ROOT="/home/users/timb_dp/perl5";
-#export PERL_MB_OPT="--install_base /home/users/timb_dp/perl5";
-#export PERL_MM_OPT="INSTALL_BASE=/home/users/timb_dp/perl5";
-#export PERL5LIB="/home/users/timb_dp/perl5/lib/perl5/i686-linux-gnu-thread-multi-64int:/home/users/timb_dp/perl5/lib/perl5";
-#export PATH="/home/users/timb_dp/perl5/bin:$PATH";
-
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export LANG="en_US.UTF-8"
 unset zle_bracketed_paste
@@ -132,3 +112,12 @@ fi
 if [ -x "$(which screenfetch 2>/dev/null)" ]; then
     screenfetch;
 fi
+
+# setup bare repository commands for dotfiles
+#
+# To set up for new system, clone bare and add alias:
+#   - git clone --bare <url> $HOME/.dotfiles
+#   - add alias
+#   - config config --local status.showUntrackedFiles no
+alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
