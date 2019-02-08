@@ -99,13 +99,12 @@ unset zle_bracketed_paste
 EDITOR="vim"; export EDITOR;
 
 # Enable FISH style syntax highlight if available
-# arch location
-if [ -e "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -e "$HOME/.zsh/syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+    source "$HOME/.zsh/syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
-# ubuntu location
-if [ -e "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Enable FISH style suggestions
+if [ -e "$HOME/.zsh/autosuggestions/zsh-autosuggestions.zsh" ]; then
+    source "$HOME/.zsh/autosuggestions/zsh-autosuggestions.zsh"
 fi
 
 # screenfetch info, if available

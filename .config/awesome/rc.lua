@@ -17,7 +17,7 @@ local beautiful     = require("beautiful")
 local naughty       = require("naughty")
 local lain          = require("lain")
 --local menubar       = require("menubar")
-local freedesktop   = require("freedesktop")
+--tb local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
@@ -88,7 +88,7 @@ local themes = {
 local chosen_theme = themes[7]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "gnome-terminal"
+local terminal     = "xfce4-terminal"
 local editor       = os.getenv("EDITOR") or "vim"
 local gui_editor   = "gvim"
 local browser      = "chromium-browser"
@@ -196,17 +196,17 @@ local myawesomemenu = {
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end }
 }
-awful.util.mymainmenu = freedesktop.menu.build({
-    icon_size = beautiful.menu_height or 16,
-    before = {
-        { "Awesome", myawesomemenu, beautiful.awesome_icon },
-        -- other triads can be put here
-    },
-    after = {
-        { "Open terminal", terminal },
-        -- other triads can be put here
-    }
-})
+--tb awful.util.mymainmenu = freedesktop.menu.build({
+--tb     icon_size = beautiful.menu_height or 16,
+--tb     before = {
+--tb         { "Awesome", myawesomemenu, beautiful.awesome_icon },
+--tb         -- other triads can be put here
+--tb     },
+--tb     after = {
+--tb         { "Open terminal", terminal },
+--tb         -- other triads can be put here
+--tb     }
+--tb })
 -- hide menu when mouse leaves it
 --awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function() awful.util.mymainmenu:hide() end)
 
