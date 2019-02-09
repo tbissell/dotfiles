@@ -24,6 +24,11 @@ do_git() {
     local git=$1
     local path=$2
 
+    # make sure parent dir exists
+    if [ ! -d "$(dirname "$2")" ]; then
+        mkdir "$(dirname "$2")"
+    fi
+
     if [ -d "$path" ]; then
         git_update "$path"
     else
@@ -67,7 +72,12 @@ setup_awesome() {
     do_git "https://github.com/lcpz/lain" "$CMD_PATH/.config/awesome/lain"
 }
 
+setup_terminals() {
+    do_git "https://github.com/powerline/fonts" "$HOME/.local/powerline-fonts"
+    $HOME/.local/powerline-fonts/install.sh
+}
+
 setup_vim;
 setup_awesome;
 setup_zsh;
-
+setup_terminals;
