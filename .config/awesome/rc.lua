@@ -495,7 +495,7 @@ globalkeys = my_table.join(
               {description = "run browser", group = "launcher"}),
     awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
               {description = "run gui editor", group = "launcher"}),
-    awful.key({ modkey }, "r", function () awful.spawn("rofi -show run") end,
+    awful.key({ modkey }, "r", function () awful.spawn("rofi -show") end,
               {description = "run launcher", group = "launcher"}),
 
     -- Default
