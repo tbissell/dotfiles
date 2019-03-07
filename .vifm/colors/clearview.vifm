@@ -1,0 +1,8 @@
+highlight Win cterm=none ctermfg=white ctermbg=None
+highlight Directory cterm=bold ctermfg=blue ctermbg=None
+highlight Border cterm=none ctermfg=black ctermbg=none
+highlight TopLine cterm=none ctermfg=lightwhite ctermbg=237
+highlight TopLineSel cterm=none ctermfg=white ctermbg=237
+highlight StatusLine cterm=none ctermfg=white ctermbg=235
+
+set showtabline=never
