@@ -7,6 +7,10 @@ CMD_PATH="$(dirname "$(readlink -f "$0")")"
 
 IMAGE="$CMD_PATH/../var/lock.png"
 
+if [ ! -d "$(dirname "$IMAGE")" ]; then
+    mkdir "$(dirname "$IMAGE")";
+fi
+
 if [ -x "$(command -v scrot)" ]; then
     # use scrot if available, *much* faster
     scrot "$IMAGE"
