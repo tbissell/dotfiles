@@ -64,6 +64,7 @@ def init_keys(config):
             Key([mod], 'Return',            lazy.spawn(config['terminal'])),
             Key([mod], 'r',                 lazy.spawn(config['launcher'])),
             Key([mod], 'f',                 lazy.spawn(config['file_manager'])),
+            Key([mod, 'shift'], 'l',        lazy.spawn(config['lock'])),
 
             # Scratchpad
             #Key([mod], 'f',                 lazy.group['scratchpad'].dropdown_toggle("terminal")),
@@ -251,7 +252,8 @@ if __name__ in ["config", "__main__"]:
             mod = 'mod4',
             terminal = 'xfce4-terminal',
             launcher = 'rofi -show',
-            file_manager = 'xfce4-terminal -e vifm'
+            file_manager = 'xfce4-terminal -e vifm',
+            lock = '/home/tbissell/.config/custom/lock.sh'
             )
 
     bring_front_click = True

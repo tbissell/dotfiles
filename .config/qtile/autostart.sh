@@ -1,7 +1,7 @@
 #!/bin/bash
 
-/usr/lib/gsd-xsettings &
+[[ -x "/usr/lib/gsd-xsettings" ]] && /usr/lib/gsd-xsettings &
 
-/usr/bin/xcompmgr &
+[[ -x "/usr/bin/xcompmgr" ]] && /usr/bin/xcompmgr &
 
-/usr/bin/nitrogen --restore
+[[ -x "/usr/bin/nitrogen" ]] && /usr/bin/nitrogen --restore
