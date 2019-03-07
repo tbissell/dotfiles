@@ -253,7 +253,7 @@ if __name__ in ["config", "__main__"]:
             terminal = 'xfce4-terminal',
             launcher = 'rofi -show',
             file_manager = 'xfce4-terminal -e vifm',
-            lock = '/home/tbissell/.config/custom/lock.sh'
+            lock = '/home/tbissell/.config/custom/bin/i3lock.sh'
             )
 
     bring_front_click = True

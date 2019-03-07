@@ -5,10 +5,9 @@
 
 CMD_PATH="$(dirname "$(readlink -f "$0")")"
 
-TMP_IMAGE="$CMD_PATH/lock.jpg"
-IMAGE="$CMD_PATH/lock.png"
+IMAGE="$CMD_PATH/../var/lock.png"
 
-if [ -x "$(which scrot)" ]; then
+if [ -x "$(command -v scrot)" ]; then
     # use scrot if available, *much* faster
     scrot "$IMAGE"
 else
