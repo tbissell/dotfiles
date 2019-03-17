@@ -83,6 +83,8 @@ def init_keys(config):
             Key([mod], 'n',                 lazy.layout.normalize()),
             Key([mod], 'm',                 lazy.layout.maximize()),
             Key([mod], 'KP_Enter',          lazy.window.toggle_floating()),
+            Key([mod], 'l',                 lazy.layout.grow()),
+            Key([mod], 'h',                 lazy.layout.shrink()),
 
             # Switch window focus to other panes
             Key([mod], 'Tab', lazy.layout.next()),

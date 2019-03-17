@@ -3,6 +3,13 @@
 # Things to get added:
 #   xfce4-terminal config
 
+# Programs that I use
+#  - tmux
+#  - vim
+#  - vifm
+#  - nitrogen
+#  - i3lock
+
 # precheck stuff
 CMD_PATH="$(dirname "$(readlink -f "$0")")"
 GIT="$(which git)"
