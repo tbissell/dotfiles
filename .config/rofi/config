@@ -1,8 +1,9 @@
-rofi.combi-modi:    run,ssh
-rofi.theme:         sidebar
+!rofi.combi-modi:    run,ssh
+rofi.theme:         gruvbox-dark-hard
 !rofi.theme:         Monokai
 rofi.font:          hack 9
-rofi.modi:          combi
+!rofi.modi:          combi
+rofi.modi:          run
 rofi.terminal:      xfce4-terminal
 rofi.ssh-client:    ssh
 rofi.ssh-command:   {terminal} -e "{ssh-client} {host}"

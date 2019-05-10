@@ -16,7 +16,7 @@ import socket
 import re
 from libqtile import bar, hook, layout, widget
 from libqtile.command import lazy
-from libqtile.config import Click, Drag, Group, Key, Screen, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, Screen
 
 def init_colors():
     return [
@@ -109,23 +109,23 @@ def init_mouse(mod):
     )
     return mouse
 
-groups = [
-        Group('1'),
-        Group('2'),
-        Group('3'),
-        Group('4'),
-        Group('5'),
-        Group('6'),
-        Group('7'),
-        Group('8'),
-        Group('9'),
-#        ScratchPad('scratchpad', [
-#            DropDown('terminal', "xterm", opacity=0.8),
-#
-#            DropDown('qshell', "xterm -e qshell",
-#                x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9, on_focus_lost_hide=True)
-#            ])
-]
+## tb groups = [
+## tb         Group('1'),
+## tb         Group('2'),
+## tb         Group('3'),
+## tb         Group('4'),
+## tb         Group('5'),
+## tb         Group('6'),
+## tb         Group('7'),
+## tb         Group('8'),
+## tb         Group('9'),
+## tb #        ScratchPad('scratchpad', [
+## tb #            DropDown('terminal', "xterm", opacity=0.8),
+## tb #
+## tb #            DropDown('qshell', "xterm -e qshell",
+## tb #                x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9, on_focus_lost_hide=True)
+## tb #            ])
+## tb ]
 
 
 def init_layouts():
@@ -225,7 +225,8 @@ def init_widgets():
         widget.Prompt(),
         #widget.WindowName(),
         widget.Spacer(),
-        widget.Systray(),
+        widget.Systray(icon_size=20, padding=2),
+        widget.Sep(),
         widget.Volume(foreground=colors[2]),
         widget.Sep(background=colors[0], padding=2),
         widget.Memory(foreground=colors[2]),
@@ -244,17 +245,24 @@ def init_screens(widgets):
                 background=colors[0],
             ),
         ),
+        Screen(
+            top=bar.Bar(
+                widgets=init_widgets(),
+                size=20,
+                background=colors[0],
+            ),
+        ),
     ]
 
 if __name__ in ["config", "__main__"]:
     wmname = 'qtile'
     mod = 'mod4'
-    custom_terminal = 'xfce4-terminal'
+    custom_terminal = 'gnome-terminal'
     config = dict(
             mod = 'mod4',
-            terminal = 'xfce4-terminal',
+            terminal = 'gnome-terminal',
             launcher = 'rofi -show',
-            file_manager = 'xfce4-terminal -e vifm',
+            file_manager = 'gnome-terminal -e vifm',
             lock = '/home/tbissell/.config/custom/bin/i3lock.sh'
             )
 
@@ -263,7 +271,7 @@ if __name__ in ["config", "__main__"]:
     follow_mouse_focus = True
     auto_fullscreen = True
 
-    dgroupds_key_binder = None
+    dgroups_key_binder = None
     dgroups_app_rules = []
 
     colors = init_colors()
@@ -277,6 +285,13 @@ if __name__ in ["config", "__main__"]:
 
     widget_defaults = init_widgets_defaults()
     screens = init_screens(init_widgets())
+
+    groups = []
+    for s, i in [(0, '1'), (1, '2'), (0, '3'), (1, '4'), (0, '5'), (1, '6'), (0, '7'), (1, '8'), (0, '9')]:
+        groups.append(Group(i))
+        keys.append(
+                Key([mod], i, lazy.group[i].toscreen(s), lazy.to_screen(s))
+                )
 
 @hook.subscribe.startup_once
 def start_once():
