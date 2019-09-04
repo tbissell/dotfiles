@@ -1,0 +1,16 @@
+[user]
+    name = Timothy Bissell
+    email = tim@susarc.com
+[color]
+    ui = true
+[alias]
+    slog = log --pretty=oneline --abbrev-commit
+    l = log --decorate --oneline --all --date-order
+    ll = log --graph --decorate --oneline --all --date-order
+    pull = pull -v
+    br = branch
+    co = checkout
+    st = status
+
+[core]
+    pager = less --quit-if-one-screen --no-init
