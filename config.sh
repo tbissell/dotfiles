@@ -13,10 +13,14 @@ PROGRAMS_Debian="tmux vim vifm nitrogen i3lock"
 PROGRAMS_Ubuntu="tmux vim vifm nitrogen i3lock"
 PROGRAMS_ManjaroLinux="tmux vim vifm nitrogen i3lock"
 PROGRAMS_Arch="tmux vim vifm nitrogen i3lock"
+PROGRAMS_Gentoo="tmux vim vifm nitrogen i3lock"
 
 if [ ! -x "$(which lsb_release 2>/dev/null)" ]; then
     # Arch is the only one so far that does not include lsb_release
-    sudo pacman -S --noconfirm lsb-release
+    [ -x "$(which pacman 2>/dev/null)" ] && sudo pacman -S --noconfirm lsb-release
+    # Gentoo joins arch with in failure to include lsb_release
+    [ -x "$(which emerge 2>/dev/null)" ] && sudo emerge lsb-release
+
 fi
 
 DISTRO="$(lsb_release -si)"
@@ -41,6 +45,10 @@ install_programs() {
             if [ "$DISTRO" == "Arch" ]; then
                 info "Installing $p..."
                 sudo pacman -S --noconfirm $p
+            fi
+            if [ "$DISTRO" == "Gentoo" ]; then
+                info "Installing $p..."
+                sudo emerge $p
             fi
         fi
     done
