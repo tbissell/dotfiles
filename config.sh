@@ -11,6 +11,7 @@
 #  - i3lock
 PROGRAMS_Debian="tmux vim vifm nitrogen i3lock"
 PROGRAMS_Ubuntu="tmux vim vifm nitrogen i3lock"
+PROGRAMS_ManjaroLinux="tmux vim vifm nitrogen i3lock"
 
 DISTRO="$(lsb_release -si)"
 SELECTED_PROGRAMS="PROGRAMS_$DISTRO"
@@ -18,14 +19,18 @@ eval SELECTED="\$$SELECTED_PROGRAMS"
 
 install_programs() {
     for p in $SELECTED; do
-        if [ ! -x "$(which $p)" ]; then
+        if [ ! -x "$(which $p 2>/dev/null)" ]; then
             if [ "$DISTRO" == "Debian" ]; then
                 info "Installing $p..."
                 sudo apt-get install -y $p
             fi
             if [ "$DISTRO" == "Ubuntu" ]; then
                 info "Installing $p..."
-                sudo apt-get install $p
+                sudo apt-get install -y $p
+            fi
+            if [ "$DISTRO" == "ManjaroLinux" ]; then
+                info "Installing $p..."
+                sudo pacman -S --noconfirm $p
             fi
         fi
     done
