@@ -9,6 +9,27 @@
 #  - vifm
 #  - nitrogen
 #  - i3lock
+PROGRAMS_Debian="tmux vim vifm nitrogen i3lock"
+PROGRAMS_Ubuntu="tmux vim vifm nitrogen i3lock"
+
+DISTRO="$(lsb_release -si)"
+SELECTED_PROGRAMS="PROGRAMS_$DISTRO"
+eval SELECTED="\$$SELECTED_PROGRAMS"
+
+install_programs() {
+    for p in $SELECTED; do
+        if [ ! -x "$(which $p)" ]; then
+            if [ "$DISTRO" == "Debian" ]; then
+                info "Installing $p..."
+                sudo apt-get install -y $p
+            fi
+            if [ "$DISTRO" == "Ubuntu" ]; then
+                info "Installing $p..."
+                sudo apt-get install $p
+            fi
+        fi
+    done
+}
 
 # precheck stuff
 CMD_PATH="$(dirname "$(readlink -f "$0")")"
@@ -84,6 +105,7 @@ setup_terminals() {
     $HOME/.local/powerline-fonts/install.sh
 }
 
+install_programs;
 setup_vim;
 setup_awesome;
 setup_zsh;
