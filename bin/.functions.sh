@@ -11,6 +11,11 @@ function warn  { echo -ne "[ ${YEL}warn${RST}]: $*"; }
 function error { echo -ne "[${RED}error${RST}]: $*"; }
 function ptest { echo -ne "[ ${CYA}test${RST}]: $*"; }
 
+function infof  { local f=$1; shift; printf "[ ${GRN}info${RST}]: $f" "$*"; }
+function warnf  { local f=$1; shift; printf "[ ${YEL}warn${RST}]: $f" "$*"; }
+function errorf { local f=$1; shift; printf "[${RED}error${RST}]: $f" "$*"; }
+function ptestf { local f=$1; shift; printf "[ ${CYA}test${RST}]: $f" "$*"; }
+
 INSTALLER=""
 REMOVER=""
 DISTRO=""
@@ -80,7 +85,7 @@ function benchmark {
     local threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     local bsizes="1K 64K 256K 512K 1M"
     for thread in $threads; do
-        ptest "CPU ($thread threads): "
+        ptestf "%-40s" "CPU ($thread threads): "
         docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
             | grep 'events per' \
             | sed -re 's,.*second:[\ ]+([0-9.]+),\1 events/s,'
@@ -88,7 +93,7 @@ function benchmark {
 
     for thread in $threads; do
         for size in $bsizes; do
-            ptest "Memory ($thread threads; block size $size): "
+            ptestf "%-40s" "Memory ($thread threads; block size $size): "
             docker run -it severalnines/sysbench sysbench memory --threads="$thread" \
                 --memory-block-size="$size" run \
                 | grep 'MiB/sec' \
@@ -97,7 +102,7 @@ function benchmark {
     done
 
     for thread in $threads; do
-        ptest "thread ($thread threads): "
+        ptestf "%-40s" "thread ($thread threads): "
         docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
             | grep 'number of events' \
             | sed -re 's,.*events:[\ ]+([0-9.]+),\1 events,'
