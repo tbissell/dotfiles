@@ -1,0 +1,30 @@
+#!/bin/bash
+
+source ~/bin/.functions.sh
+
+function getinfo {
+    os_info
+}
+
+case "$1" in
+    cmd)
+        echo 'cmd'
+        ;;
+    info)
+        getinfo
+        ;;
+    install)
+        shift
+        package_install "$*"
+        ;;
+    remove)
+        shift
+        package_remove "$*"
+        ;;
+    bench)
+        benchmark
+        ;;
+    *)
+        echo 'syntax'
+        ;;
+esac
