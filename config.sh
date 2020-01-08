@@ -126,6 +126,41 @@ setup_awesome() {
 setup_terminals() {
     do_git "https://github.com/powerline/fonts" "$HOME/.local/powerline-fonts"
     $HOME/.local/powerline-fonts/install.sh
+
+    # generally gnome-terminal (ubuntu patched) or xfce4-terminal
+
+    # Set up gnome-terminal (requires dconf)
+    _setup_gnome_terminal;
+}
+
+_setup_gnome_terminal() {
+    # Make sure it's available
+    if [ -x "$(which gnome-terminal)" ] && [ -x "$(which dconf)" ]; then
+        info "Setting up gnome-terminal..."
+        KEY="/org/gnome/terminal/legacy/profiles:/"
+        # Get profile
+        PROFILE="$(dconf list "$KEY" | head -n1)"
+        info "Configuring profile ($PROFILE)..."
+
+        # basic settings
+        dconf write "${KEY}${PROFILE}use-theme-colors" "false"
+        dconf write "${KEY}${PROFILE}use-theme-transparency" "false"
+        dconf write "${KEY}${PROFILE}use-transparent-background" "true"
+        dconf write "${KEY}${PROFILE}scrollbar-policy" "'never'"
+        dconf write "${KEY}${PROFILE}bold-is-bright" "true"
+
+        # colors
+        dconf write "${KEY}${PROFILE}background-color" "'rgb(0,0,0)'"
+        dconf write "${KEY}${PROFILE}foreground-color" "'rgb(255,255,255)'"
+        dconf write "${KEY}${PROFILE}background-transparency-percent" "10"
+        # copy of the tango palette
+        dconf write "${KEY}${PROFILE}palette" "['rgb(15,16,17)', 'rgb(99,33,33)', 'rgb(78,154,6)', 'rgb(196,160,0)', 'rgb(52,101,164)', 'rgb(117,80,123)', 'rgb(6,152,154)', 'rgb(211,215,207)', 'rgb(85,87,83)', 'rgb(239,41,41)', 'rgb(138,226,52)', 'rgb(252,233,79)', 'rgb(114,159,207)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']"
+
+        # font
+        dconf write "${KEY}${PROFILE}use-system-font" "false"
+        dconf write "${KEY}${PROFILE}font" "'Liberation Mono for Powerline 10'"
+
+    fi
 }
 
 install_programs;
