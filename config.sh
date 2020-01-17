@@ -146,7 +146,6 @@ _setup_gnome_terminal() {
         dconf write "${KEY}${PROFILE}use-theme-colors" "false"
         dconf write "${KEY}${PROFILE}use-theme-transparency" "false"
         dconf write "${KEY}${PROFILE}use-transparent-background" "true"
-        dconf write "${KEY}${PROFILE}scrollbar-policy" "'never'"
         dconf write "${KEY}${PROFILE}bold-is-bright" "true"
 
         # colors
@@ -160,6 +159,9 @@ _setup_gnome_terminal() {
         dconf write "${KEY}${PROFILE}use-system-font" "false"
         dconf write "${KEY}${PROFILE}font" "'Liberation Mono for Powerline 10'"
 
+        # disable menubar and scroll
+        dconf write "/org/gnome/terminal/legacy/default-show-menubar" "false"
+        dconf write "${KEY}${PROFILE}scrollbar-policy" "'never'"
     fi
 }
 
