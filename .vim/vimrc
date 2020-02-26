@@ -33,6 +33,10 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-speeddating'
 Plugin 'jgdavey/tslime.vim'
 Plugin 'tpope/vim-repeat'
+Plugin 'burnettk/vim-angular'
+Plugin 'pangloss/vim-javascript'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 
@@ -257,6 +261,8 @@ nmap <C-c><C-c> <Plug>NormalModeSendToTmux
 let g:tslime_always_current_session = 1
 "{{{2 airline
 let g:airline_powerline_fonts = 1
+"{{{2 ctrlp
+let g:ctrlp_custom_ignore = 'node_modules'
 "{{{1 Helper functions
 "{{{2 functions
 " toggle function for foldcolumn
@@ -318,6 +324,7 @@ endfunction
 au BufRead,BufNewFile *.scss set filetype=scss
 au BufRead,BufNewFile *.js.erb set filetype=eruby.js
 au BufRead,BufNewFile *.html.erb set filetype=eruby.html
+au BufRead,BufNewFile *.ts set filetype=typescript
 "{{{2 Perl
 au FileType perl setlocal keywordprg=perldoc\ -T\ -f
 

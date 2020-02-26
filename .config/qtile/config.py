@@ -227,6 +227,8 @@ def init_widgets():
         widget.Spacer(),
         widget.Systray(icon_size=20, padding=2),
         widget.Sep(),
+        widget.CurrentScreen(),
+        widget.Sep(),
         widget.Volume(foreground=colors[2]),
         widget.Sep(background=colors[0], padding=2),
         widget.Memory(foreground=colors[2]),
@@ -257,12 +259,13 @@ def init_screens(widgets):
 if __name__ in ["config", "__main__"]:
     wmname = 'qtile'
     mod = 'mod4'
-    custom_terminal = 'gnome-terminal'
+    custom_terminal = 'xfce4-terminal'
     config = dict(
             mod = 'mod4',
-            terminal = 'gnome-terminal',
-            launcher = 'rofi -show',
-            file_manager = 'gnome-terminal -e vifm',
+            terminal = 'xfce4-terminal',
+            #launcher = 'rofi -show',
+            launcher = 'dmenu_run -p "dmenu:"',
+            file_manager = 'xfce4-terminal -e vifm',
             lock = '/home/tbissell/.config/custom/bin/i3lock.sh'
             )
 
