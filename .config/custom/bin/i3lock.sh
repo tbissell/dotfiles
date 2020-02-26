@@ -11,6 +11,11 @@ if [ ! -d "$(dirname "$IMAGE")" ]; then
     mkdir "$(dirname "$IMAGE")";
 fi
 
+# remove old lock image if exists
+if [ -e "$IMAGE" ]; then
+    rm "$IMAGE"
+fi
+
 if [ -x "$(command -v scrot)" ]; then
     # use scrot if available, *much* faster
     scrot "$IMAGE"
