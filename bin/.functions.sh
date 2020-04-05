@@ -18,6 +18,7 @@ function ptestf { local f=$1; shift; printf "[ ${CYA}test${RST}]: $f" "$*"; }
 
 INSTALLER=""
 REMOVER=""
+UPDATER=""
 DISTRO=""
 DISTRO_DESC=""
 DOCKER=""
@@ -35,24 +36,19 @@ function id_os {
 
     DISTRO="$(lsb_release -si)"
     DISTRO_DESC="$(lsb_release -sd | sed -e 's,",,g')"
-    if [ "$DISTRO" == "Debian" ]; then
+    if [ "$DISTRO" == "Debian" ] || [ "$DISTRO" == "Ubuntu" ]; then
         INSTALLER="sudo apt-get install -y"
+        UPDATER="sudo apt-get upgrade"
         REMOVER="sudo apt-get remove -y"
     fi
-    if [ "$DISTRO" == "Ubuntu" ]; then
-        INSTALLER="sudo apt-get install -y"
-        REMOVER="sudo apt-get remove -y"
-    fi
-    if [ "$DISTRO" == "ManjaroLinux" ]; then
+    if [ "$DISTRO" == "Arch" ] || [ "$DISTRO" == "ManjaroLinux" ]; then
         INSTALLER="sudo pacman -S --noconfirm"
-        REMOVER="sudo pacman -R --noconfirm"
-    fi
-    if [ "$DISTRO" == "Arch" ]; then
-        INSTALLER="sudo pacman -S --noconfirm"
+        UPDATER="sudo pacman -Syu"
         REMOVER="sudo pacman -R --noconfirm"
     fi
     if [ "$DISTRO" == "Gentoo" ]; then
         INSTALLER="sudo emerge"
+        UPDATER="sudo emerge -aDuv @world"
         REMOVER="sudo emerge -C"
     fi
 
@@ -62,15 +58,37 @@ function id_os {
     fi
 }
 
+function system_info {
+    PROC_NAME="$(grep '^model name' /proc/cpuinfo|cut -d' ' -f3- |head -1)"
+    PROC_CORES="$(grep -c '^processor' /proc/cpuinfo)";
+    MEMORY=$(printf "%.2f GB" $(echo $(grep '^MemTotal' /proc/meminfo|awk '{print $2}') / 1000 / 1000 | bc -l))
+    VIDEO=$(lspci |grep VGA | sed -e 's,.*: ,,')
+
+    info "System Information:\n";
+    info "\tProcessor: $PROC_NAME ($PROC_CORES cores)\n";
+    info "\tMemory: $MEMORY\n";
+    info "\tVideo: $VIDEO\n";
+    info "\tKernel: $(uname -mr)\n";
+    info "\tUptime: $(uptime)\n";
+    info "\tShell: $($(getent passwd $USER|cut -d: -f7) --version|head -1)\n";
+}
+
 function os_info {
-    info "OS Information: $DISTRO_DESC ($DISTRO)\n"
-    info "Install program: $INSTALLER\n";
-    info "Remove program: $REMOVER\n";
+    info "OS Information:\n";
+    info "\t$DISTRO_DESC $(lsb_release -cs) ($DISTRO)\n"
+    info "\tInstall program: $INSTALLER\n";
+    info "\tRemove program: $REMOVER\n";
+    info "\tUpdate program: $UPDATER\n";
 }
 
 function package_install {
     info "Installing package(s): $*\n"
     $INSTALLER $1
+}
+
+function system_update {
+    info "Updating system...\n";
+    $UPDATER
 }
 
 function package_remove {

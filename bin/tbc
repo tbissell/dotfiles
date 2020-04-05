@@ -4,6 +4,8 @@ source ~/bin/.functions.sh
 
 function getinfo {
     os_info
+    echo
+    system_info
 }
 
 case "$1" in
@@ -23,6 +25,9 @@ case "$1" in
         ;;
     bench)
         benchmark
+        ;;
+    update)
+        system_update
         ;;
     *)
         echo 'syntax'
