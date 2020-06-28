@@ -45,5 +45,6 @@ urxvt*depth: 32
 urxvt*background: rgba:0000/0000/0200/d800
 urxvt.scrollBar: false
 
-urxvt.font: xft:Literation Mono Powerline:size=9
-urxvt.letterspace: -4
+!urxvt.font: xft:Hack:size=9
+urxvt.font: xft:Liberation Mono for Powerline:size=9
+urxvt.letterSpace: -1

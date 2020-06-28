@@ -91,6 +91,21 @@ function system_update {
     $UPDATER
 }
 
+function command_update {
+    info "Updating command scripts...\n";
+    DOCKER_MACHINE_URL="https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-$(uname -s)-$(uname -m)"
+    if [ ! -e "$HOME/bin/docker-machine" ]; then
+        curl -L# -o $HOME/bin/docker-machine "$DOCKER_MACHINE_URL";
+        chmod +x $HOME/bin/docker-machine
+    fi
+
+    DOCKER_MACHINE_KVM_URL="https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm"
+    if [ ! -e "$HOME/bin/docker-machine-driver-kvm" ]; then
+        curl -L# -o $HOME/bin/docker-machine-driver-kvm "$DOCKER_MACHINE_KVM_URL"
+        chmod +x $HOME/bin/docker-machine-driver-kvm
+    fi
+}
+
 function package_remove {
     info "Removing package(s): $*\n"
     $REMOVER $1

@@ -92,7 +92,7 @@ case "$TERM" in
     xterm*) TERM=xterm-256color
 esac
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH="$PATH:$HOME/.local/bin:$HOME/bin:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export LANG="en_US.UTF-8"
 unset zle_bracketed_paste
 

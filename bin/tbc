@@ -28,6 +28,7 @@ case "$1" in
         ;;
     update)
         system_update
+        command_update
         ;;
     *)
         echo 'syntax'

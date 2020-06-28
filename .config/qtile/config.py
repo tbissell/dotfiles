@@ -17,6 +17,7 @@ import re
 from libqtile import bar, hook, layout, widget
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Screen
+from libqtile.config import ScratchPad, DropDown
 
 def init_colors():
     return [
@@ -67,7 +68,8 @@ def init_keys(config):
             Key([mod, 'shift'], 'l',        lazy.spawn(config['lock'])),
 
             # Scratchpad
-            #Key([mod], 'f',                 lazy.group['scratchpad'].dropdown_toggle("terminal")),
+            Key([mod], 'g',                 lazy.group['scratchpad'].dropdown_toggle("terminal")),
+            Key([mod], 'q',                 lazy.group['scratchpad'].dropdown_toggle("qshell")),
 
             Key([mod], 'Left',              lazy.screen.prev_group()),
             Key([mod], 'Right',             lazy.screen.next_group()),
@@ -82,12 +84,12 @@ def init_keys(config):
             Key([mod], 'space',             lazy.next_layout()),
             Key([mod], 'n',                 lazy.layout.normalize()),
             Key([mod], 'm',                 lazy.layout.maximize()),
-            Key([mod], 'KP_Enter',          lazy.window.toggle_floating()),
             Key([mod], 'l',                 lazy.layout.grow()),
             Key([mod], 'h',                 lazy.layout.shrink()),
 
-            # Switch window focus to other panes
-            Key([mod], 'Tab', lazy.layout.next()),
+            # Screen control
+            Key([mod, 'control'], 'j',      lazy.next_screen()),
+            Key([mod, 'control'], 'k',      lazy.prev_screen()),
     ]
 
     for i in range(1, 10):
@@ -108,24 +110,6 @@ def init_mouse(mod):
                 start=lazy.window.get_size()),
     )
     return mouse
-
-## tb groups = [
-## tb         Group('1'),
-## tb         Group('2'),
-## tb         Group('3'),
-## tb         Group('4'),
-## tb         Group('5'),
-## tb         Group('6'),
-## tb         Group('7'),
-## tb         Group('8'),
-## tb         Group('9'),
-## tb #        ScratchPad('scratchpad', [
-## tb #            DropDown('terminal', "xterm", opacity=0.8),
-## tb #
-## tb #            DropDown('qshell', "xterm -e qshell",
-## tb #                x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9, on_focus_lost_hide=True)
-## tb #            ])
-## tb ]
 
 
 def init_layouts():
@@ -209,7 +193,7 @@ def init_layouts():
 
 def init_floating_layout():
     return layout.Floating(
-            # auto_float_types = {'splash', 'utility', 'toolbar', 'dialog', 'notification'}
+            auto_float_types = {'splash', 'utility', 'toolbar', 'dialog', 'notification'}
             **layout_theme
             )
 
@@ -230,6 +214,29 @@ def init_widgets():
         widget.CurrentScreen(),
         widget.Sep(),
         widget.Volume(foreground=colors[2]),
+        widget.Sep(background=colors[0], padding=2),
+        widget.CPUGraph(
+            width=30,
+            border_width=1,
+            border_color="#000000",
+            frequency=5,
+            line_width=1,
+            samples=50
+        ),
+        widget.MemoryGraph(
+            width=30,
+            border_width=1,
+            border_color="#000000",
+            frequency=5,
+            line_width=1,
+        ),
+        widget.NetGraph(
+            width=30,
+            border_width=1,
+            border_color="#000000",
+            frequency=5,
+            line_width=1,
+        ),
         widget.Sep(background=colors[0], padding=2),
         widget.Memory(foreground=colors[2]),
         widget.Sep(background=colors[0], padding=2),
@@ -285,16 +292,35 @@ if __name__ in ["config", "__main__"]:
     layouts = init_layouts()
     floating_layout = layout.Floating()
     border_args = {"border_width": 2}
+    focus_on_window_activation = "smart"
 
     widget_defaults = init_widgets_defaults()
     screens = init_screens(init_widgets())
 
-    groups = []
-    for s, i in [(0, '1'), (1, '2'), (0, '3'), (1, '4'), (0, '5'), (1, '6'), (0, '7'), (1, '8'), (0, '9')]:
-        groups.append(Group(i))
-        keys.append(
-                Key([mod], i, lazy.group[i].toscreen(s), lazy.to_screen(s))
-                )
+#    groups = []
+#    for s, i in [(0, '1'), (1, '2'), (0, '3'), (1, '4'), (0, '5'), (1, '6'), (0, '7'), (1, '8'), (0, '9')]:
+#        groups.append(Group(i))
+#        keys.append(
+#                Key([mod], i, lazy.group[i].toscreen(s), lazy.to_screen(s))
+#                )
+
+groups = [
+        Group('1'),
+        Group('2'),
+        Group('3'),
+        Group('4'),
+        Group('5'),
+        Group('6'),
+        Group('7'),
+        Group('8'),
+        Group('9'),
+        ScratchPad('scratchpad', [
+            DropDown('terminal', "xterm", opacity=0.8),
+
+            DropDown('qshell', "xterm -e qshell",
+                x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9, on_focus_lost_hide=True)
+            ])
+]
 
 @hook.subscribe.startup_once
 def start_once():

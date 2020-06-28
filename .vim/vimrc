@@ -8,7 +8,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-easytags'
+"Plugin 'xolox/vim-easytags'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/perlomni.vim'
 "Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -35,8 +35,10 @@ Plugin 'jgdavey/tslime.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
-Plugin 'leafgarland/typescript-vim'
+"Plugin 'leafgarland/typescript-vim'
 Plugin 'rust-lang/rust.vim'
+Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'HerringtonDarkholme/yats'
 
 call vundle#end()
 
@@ -107,6 +109,7 @@ nmap <Leader>tl :TagbarToggle<cr>
 " fugitive shortcuts
 nmap <Leader>gc :Gcommit<cr>
 nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gp :Gpush<cr>
 nmap <Leader>gd :Gdiff<cr>
 nmap <Leader>gl :copen<cr>:Glog<cr>
 nmap <Leader>gb :Gblame<cr>
@@ -117,7 +120,7 @@ nmap <Leader>tp :tabprev<cr>
 nmap <Leader>tc :tabnew<cr>
 
 " My own handy shortcuts
-nmap <Leader>t :tabnew<cr>
+nmap <Leader>t :terminal<cr>
 nmap <Leader>u :!perl ~/.vim/update-plugins.pl<cr>
 nmap <silent><leader>f :set number!<cr>:call FoldColumnToggle()<cr>
 nmap <Leader>ll :lopen<cr>
@@ -167,6 +170,9 @@ au BufNewFile,BufRead *.sh nmap <leader>r :execute Readshell("bash", expand("%")
 au BufNewFile,BufRead *.rb nmap <leader>r :execute Readshell("ruby", expand("%"))<cr>
 au BufNewFile,BufRead *.sh nmap <leader>R :execute '!bash '. expand("%")<cr>
 au BufNewFile,BufRead *.rb nmap <leader>R :execute '!ruby '. expand("%")<cr>
+
+vnoremap ;st "cy:call TermSend()<cr>
+nnoremap <leader>st 0"cy$:call TermSend()<cr>
 
 " better regex's
 nnoremap / /\v
@@ -249,6 +255,9 @@ let g:org_todo_keywords = ['TODO(t)', 'STARTED(s)', 'WAITING(w)', '|', 'DONE(d)'
 "{{{2 Easytags
 let g:easytags_dynamic_files = 1
 let g:easytags_suppress_ctags_warning = 1
+"{{{2 Gutentags
+let g:gutentags_define_advanced_commands = 1
+let g:gutentags_ctags_exclude = ['node_modules']
 "{{{2 Syntastic
 let g:syntastic_perl_checkers = ['perl', 'podchecker']
 let g:syntastic_enable_perl_checker = 1
@@ -274,6 +283,19 @@ function! FoldColumnToggle()
         setlocal foldcolumn=3
         GitGutterSignsEnable
     endif
+endfunction
+
+augroup send_to_term
+    autocmd!
+    autocmd TerminalOpen * if &buftype ==# 'terminal' |
+        \   let t:send_to_term = +expand('<abuf>') |
+        \ endif
+augroup END
+
+function! TermSend()
+    let buf = get(t:, 'send_to_term', 0)
+    let keys = substitute(@c, '\n$', '', '')
+    call term_sendkeys(buf, @c . "\<cr>")
 endfunction
 
 function! Readshell(cmd, buffer_fname)
