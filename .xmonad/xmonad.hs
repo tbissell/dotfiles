@@ -119,6 +119,7 @@ myStartupHook = do
           spawnOnce "xcompmgr -f &"
           --spawnOnce "xrandr --output DVI-D-1 --left-of DVI-D-0"
           spawnOnce "xinput set-prop 'Razer Razer DeathAdder' 'Coordinate Transformation Matrix' 0.3 0 0 0 0.3 0 0 0 1"
+          spawnOnce "setxkbmap -layout us -option compose:ralt"
           setWMName "LG3D"
           --spawnOnce "exec /usr/bin/trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 15 --transparent true --alpha 0 --tint 0x292d3e --height 19 &"
           --spawnOnce "/home/dt/.xmonad/xmonad.start" -- Sets our wallpaper
