@@ -117,18 +117,28 @@ function benchmark {
     docker pull severalnines/sysbench
 
     system_info
+    echo
     local threads;
     local bsizes;
 
     threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     bsizes="1K 64K 256K 512K 1M"
 
-    ptestf "CPU (threads:events/s):"
+    ptestf "CPU Integer (threads:events/s):"
     for thread in $threads; do
         printf "%4s: %10s " "$thread" \
         "$(docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
             | grep 'events per' \
             | sed -re "s,.*second:[\ ]+([0-9.]+),\1  ," | tr -d '\r\n')"
+    done
+    echo
+
+    ptestf "thread (threads:event/s): "
+    for thread in $threads; do
+        printf "%4s: %10s " "$thread" \
+        "$(docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
+            | grep 'number of events' \
+            | sed -re 's,.*events:[\ ]+([0-9.]+),\1,' | tr -d '\r\n')"
     done
     echo
 
@@ -143,15 +153,6 @@ function benchmark {
         done
         echo
     done
-
-    ptestf "thread (threads:event/s): "
-    for thread in $threads; do
-        printf "%4s: %10s " "$thread" \
-        "$(docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
-            | grep 'number of events' \
-            | sed -re 's,.*events:[\ ]+([0-9.]+),\1,' | tr -d '\r\n')"
-    done
-    echo
 
     #sysbench --test=cpu --cpu-max-prime=100000 run --num-threads=1 --max-requests=100
 }
