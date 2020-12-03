@@ -1,15 +1,16 @@
 enable-colors = yes
 
 color background = none
-color title = 167
-color title-bold = 179
+color background = none
+color title = 167/none
+color title-bold = 179/none
 
 color list = 246
 color list-bold = 107
 
-color progressbar = 73
-color status-state = 156
-color status-song = 107
-color status-time = 179
+color progressbar = 73/none
+color status-state = 156/none
+color status-song = 107/none
+color status-time = 179/none
 
 color line = 246

@@ -183,7 +183,8 @@ myKeys =
         , ("M-S-<Right>", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next workspace
         , ("M-S-<Left>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to previous workspace
         , ("M-<Space>", sendMessage NextLayout)                              -- Switch to next layout
-
+        , ("M-<Delete>", withFocused $ windows . W.sink)  -- Push floating window back to tile.
+        , ("M-S-<Delete>", sinkAll)                  -- Push ALL floating windows back to tile.
 -- 
 -- 
 --     -- Xmonad

@@ -31,7 +31,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-speeddating'
-Plugin 'jgdavey/tslime.vim'
+"Plugin 'jgdavey/tslime.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
@@ -274,6 +274,13 @@ let g:airline_powerline_fonts = 1
 let g:ctrlp_custom_ignore = 'node_modules'
 "{{{1 Helper functions
 "{{{2 functions
+" disable auto tags for certain files
+augroup tagAug
+    autocmd!
+    " disable if in git commit, or other project not needing tags
+    autocmd FileType git,gitcommit,gitrebase,gitsendemail,markdown :let g:gutentags_enabled=0
+augroup end
+
 " toggle function for foldcolumn
 function! FoldColumnToggle()
     if &foldcolumn
