@@ -126,16 +126,16 @@ function benchmark {
 
     ptestf "CPU Int (threads:events/s):"
     for thread in $threads; do
-        printf "%4s: %10s " "$thread" \
+        printf "%4s: %8.2f  " "$thread" \
         "$(docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
             | grep 'events per' \
-            | sed -re "s,.*second:[\ ]+([0-9.]+),\1  ," | tr -d '\r\n')"
+            | sed -re "s,.*second:[\ ]+([0-9.]+),\1," | tr -d '\r\n')"
     done
     echo
 
     ptestf "thread (threads:event/s): "
     for thread in $threads; do
-        printf "%4s: %10s " "$thread" \
+        printf "%4s: %8.2f  " "$thread" \
         "$(docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
             | grep 'number of events' \
             | sed -re 's,.*events:[\ ]+([0-9.]+),\1,' | tr -d '\r\n')"
@@ -145,11 +145,11 @@ function benchmark {
     for thread in $threads; do
         ptestf "Memory ($thread thread - MB/s): "
         for size in $bsizes; do
-            printf "%4s: %10s " "$size" \
+            printf "%4s: %8.2f  " "$size" \
             "$(docker run -it severalnines/sysbench sysbench memory --threads="$thread" \
                 --memory-block-size="$size" run \
                 | grep 'MiB/sec' \
-                | sed -re "s,.*\((.*) MiB/sec\),\1  ," -e 's/sec/s/'| tr -d '\r\n')"
+                | sed -re "s,.*\((.*) MiB/sec\),\1," | tr -d '\r\n')"
         done
         echo
     done
