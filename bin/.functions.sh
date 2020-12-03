@@ -115,7 +115,7 @@ function package_remove {
 
 function benchmark {
     info "Updating sysbench container...\n"
-    docker pull severalnines/sysbench
+    docker pull -q severalnines/sysbench
 
     system_info
     echo
