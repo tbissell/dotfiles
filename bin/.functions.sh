@@ -62,11 +62,12 @@ function system_info {
     PROC_NAME="$(grep '^model name' /proc/cpuinfo|cut -d' ' -f3- |head -1)"
     PROC_CORES="$(grep -c '^processor' /proc/cpuinfo)";
     MEMORY=$(printf "%.2f GB" "$(echo "$(grep '^MemTotal' /proc/meminfo|awk '{print $2}')" / 1000 / 1000 | bc -l)")
+    MEMSPEED="$(sudo dmidecode --type 17 |grep -v Unknown |grep Speed: |head -n1 | sed -re 's,.*Speed: (.*),\1,')"
     VIDEO=$(lspci |grep VGA | sed -e 's,.*: ,,')
 
     info "System Information:\n";
     info "\tProcessor: $PROC_NAME ($PROC_CORES cores)\n";
-    info "\tMemory: $MEMORY\n";
+    info "\tMemory: $MEMORY ($MEMSPEED)\n";
     info "\tVideo: $VIDEO\n";
     info "\tKernel: $(uname -mr)\n";
     info "\tUptime: $(uptime)\n";
