@@ -41,7 +41,7 @@ function id_os {
         UPDATER="sudo apt-get upgrade"
         REMOVER="sudo apt-get remove -y"
     fi
-    if [ "$DISTRO" == "Arch" ] || [ "$DISTRO" == "ManjaroLinux" ]; then
+    if [ "$DISTRO" == "Arch" ] || [ "$DISTRO" == "ManjaroLinux" ] || [ "$DISTRO" == "ArcoLinux" ]; then
         INSTALLER="sudo pacman -S --noconfirm"
         UPDATER="sudo pacman -Syu"
         REMOVER="sudo pacman -R --noconfirm"
@@ -115,8 +115,10 @@ function benchmark {
     info "Updating sysbench container...\n"
     docker pull severalnines/sysbench
 
+    system_info
     local threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     local bsizes="1K 64K 256K 512K 1M"
+
     for thread in $threads; do
         ptestf "%-40s" "CPU ($thread threads): "
         docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
