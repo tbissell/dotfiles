@@ -39,6 +39,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'rust-lang/rust.vim'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'HerringtonDarkholme/yats'
+Plugin 'leafgarland/typescript-vim'
 
 call vundle#end()
 

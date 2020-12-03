@@ -9,11 +9,11 @@
 #  - vifm
 #  - nitrogen
 #  - i3lock
-PROGRAMS_Debian="tmux vim vifm nitrogen i3lock"
-PROGRAMS_Ubuntu="tmux vim vifm nitrogen i3lock"
-PROGRAMS_ManjaroLinux="tmux vim vifm nitrogen i3lock"
-PROGRAMS_Arch="tmux vim vifm nitrogen i3lock"
-PROGRAMS_Gentoo="tmux vim vifm nitrogen i3lock"
+PROGRAMS_Debian="tmux vim vifm"
+PROGRAMS_Ubuntu="tmux vim vifm"
+PROGRAMS_ManjaroLinux="tmux vim vifm"
+PROGRAMS_Arch="tmux vim vifm"
+PROGRAMS_Gentoo="tmux vim vifm"
 
 if [ ! -x "$(which lsb_release 2>/dev/null)" ]; then
     # Arch is the only one so far that does not include lsb_release
