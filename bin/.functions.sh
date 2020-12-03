@@ -11,10 +11,10 @@ function warn  { echo -ne "[ ${YEL}warn${RST}]: $*"; }
 function error { echo -ne "[${RED}error${RST}]: $*"; }
 function ptest { echo -ne "[ ${CYA}test${RST}]: $*"; }
 
-function infof  { local f=$1; shift; printf "[ ${GRN}info${RST}]: %s" "$f" "$*"; }
-function warnf  { local f=$1; shift; printf "[ ${YEL}warn${RST}]: %s" "$f" "$*"; }
-function errorf { local f=$1; shift; printf "[${RED}error${RST}]: %s" "$f" "$*"; }
-function ptestf { local f=$1; shift; printf "[ ${CYA}test${RST}]: %s" "$f" "$*"; }
+function infof  { printf "[ ${GRN}info${RST}]: %-30s" "$*"; }
+function warnf  { printf "[ ${YEL}warn${RST}]: %-30s" "$*"; }
+function errorf { printf "[${RED}error${RST}]: %-30s" "$*"; }
+function ptestf { printf "[ ${CYA}test${RST}]: %-30s" "$*"; }
 
 INSTALLER=""
 REMOVER=""
@@ -123,29 +123,35 @@ function benchmark {
     threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     bsizes="1K 64K 256K 512K 1M"
 
+    ptestf "CPU (threads:events/s):"
     for thread in $threads; do
-        ptestf "%-40s" "CPU ($thread threads): "
-        docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
+        printf "%4s: %10s " "$thread" \
+        "$(docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
             | grep 'events per' \
-            | sed -re 's,.*second:[\ ]+([0-9.]+),\1 events/s,'
+            | sed -re "s,.*second:[\ ]+([0-9.]+),\1  ," | tr -d '\r\n')"
     done
+    echo
 
     for thread in $threads; do
+        ptestf "Memory ($thread thread - MB/s): "
         for size in $bsizes; do
-            ptestf "%-40s" "Memory ($thread threads; block size $size): "
-            docker run -it severalnines/sysbench sysbench memory --threads="$thread" \
+            printf "%4s: %10s " "$size" \
+            "$(docker run -it severalnines/sysbench sysbench memory --threads="$thread" \
                 --memory-block-size="$size" run \
                 | grep 'MiB/sec' \
-                | sed -re 's,.*\((.* MiB/sec)\),\1,'
+                | sed -re "s,.*\((.*) MiB/sec\),\1  ," -e 's/sec/s/'| tr -d '\r\n')"
         done
+        echo
     done
 
+    ptestf "thread (threads:event/s): "
     for thread in $threads; do
-        ptestf "%-40s" "thread ($thread threads): "
-        docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
+        printf "%4s: %10s " "$thread" \
+        "$(docker run -it severalnines/sysbench sysbench threads --threads="$thread" run \
             | grep 'number of events' \
-            | sed -re 's,.*events:[\ ]+([0-9.]+),\1 events,'
+            | sed -re 's,.*events:[\ ]+([0-9.]+),\1,' | tr -d '\r\n')"
     done
+    echo
 
     #sysbench --test=cpu --cpu-max-prime=100000 run --num-threads=1 --max-requests=100
 }
