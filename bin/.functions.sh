@@ -124,7 +124,7 @@ function benchmark {
     threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     bsizes="1K 64K 256K 512K 1M"
 
-    ptestf "CPU Integer (threads:events/s):"
+    ptestf "CPU Int (threads:events/s):"
     for thread in $threads; do
         printf "%4s: %10s " "$thread" \
         "$(docker run -it severalnines/sysbench sysbench cpu --threads="$thread" run \
