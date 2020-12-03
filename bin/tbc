@@ -1,11 +1,23 @@
 #!/bin/bash
 
-source ~/bin/.functions.sh
+# shellcheck source=/dev/null
+source "$HOME/bin/.functions.sh"
 
 function getinfo {
     os_info
     echo
     system_info
+}
+
+function buildit {
+    case "$1" in
+        matterhorn)
+            echo "matterhorn";
+            ;;
+        *)
+            echo 'syntax';
+            ;;
+    esac
 }
 
 case "$1" in
@@ -30,7 +42,12 @@ case "$1" in
         system_update
         command_update
         ;;
+    # building custom software
+    build)
+        shift
+        buildit "$*"
+        ;;
     *)
-        echo 'syntax'
+        echo 'syntax';
         ;;
 esac

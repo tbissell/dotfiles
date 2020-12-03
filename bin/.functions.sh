@@ -11,10 +11,10 @@ function warn  { echo -ne "[ ${YEL}warn${RST}]: $*"; }
 function error { echo -ne "[${RED}error${RST}]: $*"; }
 function ptest { echo -ne "[ ${CYA}test${RST}]: $*"; }
 
-function infof  { local f=$1; shift; printf "[ ${GRN}info${RST}]: $f" "$*"; }
-function warnf  { local f=$1; shift; printf "[ ${YEL}warn${RST}]: $f" "$*"; }
-function errorf { local f=$1; shift; printf "[${RED}error${RST}]: $f" "$*"; }
-function ptestf { local f=$1; shift; printf "[ ${CYA}test${RST}]: $f" "$*"; }
+function infof  { local f=$1; shift; printf "[ ${GRN}info${RST}]: %s" "$f" "$*"; }
+function warnf  { local f=$1; shift; printf "[ ${YEL}warn${RST}]: %s" "$f" "$*"; }
+function errorf { local f=$1; shift; printf "[${RED}error${RST}]: %s" "$f" "$*"; }
+function ptestf { local f=$1; shift; printf "[ ${CYA}test${RST}]: %s" "$f" "$*"; }
 
 INSTALLER=""
 REMOVER=""
@@ -25,13 +25,13 @@ DOCKER=""
 
 # docker run -p 6667:6667 42wim/matterircd:latest -bind 0.0.0.0:6667 --mserver mm.sdagit.com
 function id_os {
-    if [ ! -x "$(which lsb_release 2>/dev/null)" ]; then
+    if [ ! -x "$(command -v lsb_release 2>/dev/null)" ]; then
         # Manjaro/Arch derivatives
-        [ -x "$(which pacman 2>/dev/null)" ] && sudo pacman -S --noconfirm lsb-release
+        [ -x "$(command -v pacman 2>/dev/null)" ] && sudo pacman -S --noconfirm lsb-release
         # Gentoo
-        [ -x "$(which emerge 2>/dev/null)" ] && sudo emerge lsb-release
+        [ -x "$(command -v emerge 2>/dev/null)" ] && sudo emerge lsb-release
         # Ubuntu/Debian derivatives
-        [ -x "$(which apt-get 2>/dev/null)" ] && sudo apt-get install -y lsb-release
+        [ -x "$(command -v apt-get 2>/dev/null)" ] && sudo apt-get install -y lsb-release
     fi
 
     DISTRO="$(lsb_release -si)"
@@ -53,15 +53,15 @@ function id_os {
     fi
 
     # identify if we have docker
-    if [ -x "$(which docker)" ]; then
-        DOCKER="$(which docker)"
+    if [ -x "$(command -v docker)" ]; then
+        DOCKER="$(command -v docker)"
     fi
 }
 
 function system_info {
     PROC_NAME="$(grep '^model name' /proc/cpuinfo|cut -d' ' -f3- |head -1)"
     PROC_CORES="$(grep -c '^processor' /proc/cpuinfo)";
-    MEMORY=$(printf "%.2f GB" $(echo $(grep '^MemTotal' /proc/meminfo|awk '{print $2}') / 1000 / 1000 | bc -l))
+    MEMORY=$(printf "%.2f GB" "$(echo "$(grep '^MemTotal' /proc/meminfo|awk '{print $2}')" / 1000 / 1000 | bc -l)")
     VIDEO=$(lspci |grep VGA | sed -e 's,.*: ,,')
 
     info "System Information:\n";
@@ -70,7 +70,6 @@ function system_info {
     info "\tVideo: $VIDEO\n";
     info "\tKernel: $(uname -mr)\n";
     info "\tUptime: $(uptime)\n";
-    info "\tShell: $($(getent passwd $USER|cut -d: -f7) --version|head -1)\n";
 }
 
 function os_info {
@@ -79,11 +78,13 @@ function os_info {
     info "\tInstall program: $INSTALLER\n";
     info "\tRemove program: $REMOVER\n";
     info "\tUpdate program: $UPDATER\n";
+    info "\tDocker: $($DOCKER --version | sed 's/^.*version //')\n";
+    info "\tShell: $($(getent passwd "$USER"|cut -d: -f7) --version|head -1)\n";
 }
 
 function package_install {
     info "Installing package(s): $*\n"
-    $INSTALLER $1
+    $INSTALLER "$1"
 }
 
 function system_update {
@@ -95,20 +96,20 @@ function command_update {
     info "Updating command scripts...\n";
     DOCKER_MACHINE_URL="https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-$(uname -s)-$(uname -m)"
     if [ ! -e "$HOME/bin/docker-machine" ]; then
-        curl -L# -o $HOME/bin/docker-machine "$DOCKER_MACHINE_URL";
-        chmod +x $HOME/bin/docker-machine
+        curl -L# -o "$HOME/bin/docker-machine" "$DOCKER_MACHINE_URL";
+        chmod +x "$HOME/bin/docker-machine"
     fi
 
     DOCKER_MACHINE_KVM_URL="https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm"
     if [ ! -e "$HOME/bin/docker-machine-driver-kvm" ]; then
-        curl -L# -o $HOME/bin/docker-machine-driver-kvm "$DOCKER_MACHINE_KVM_URL"
-        chmod +x $HOME/bin/docker-machine-driver-kvm
+        curl -L# -o "$HOME/bin/docker-machine-driver-kvm" "$DOCKER_MACHINE_KVM_URL"
+        chmod +x "$HOME/bin/docker-machine-driver-kvm"
     fi
 }
 
 function package_remove {
     info "Removing package(s): $*\n"
-    $REMOVER $1
+    $REMOVER "$1"
 }
 
 function benchmark {
@@ -116,8 +117,11 @@ function benchmark {
     docker pull severalnines/sysbench
 
     system_info
-    local threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
-    local bsizes="1K 64K 256K 512K 1M"
+    local threads;
+    local bsizes;
+
+    threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
+    bsizes="1K 64K 256K 512K 1M"
 
     for thread in $threads; do
         ptestf "%-40s" "CPU ($thread threads): "
