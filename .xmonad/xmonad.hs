@@ -116,7 +116,7 @@ main = do
 myStartupHook = do
           --spawnOnce "emacs --daemon &" 
           spawnOnce "nitrogen --restore &"
-          spawnOnce "xcompmgr -f &"
+          spawnOnce "xcompmgr -f -n &"
           --spawnOnce "xrandr --output DVI-D-1 --left-of DVI-D-0"
           spawnOnce "xinput set-prop 'Razer Razer DeathAdder' 'Coordinate Transformation Matrix' 0.3 0 0 0 0.3 0 0 0 1"
           spawnOnce "setxkbmap -layout us -option compose:ralt"
