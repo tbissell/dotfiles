@@ -74,7 +74,7 @@ import XMonad.Prompt (defaultXPConfig, XPConfig(..), XPPosition(Top), Direction1
 ------------------------------------------------------------------------
 myFont          = "xft:Liberation Mono for Powerline:regular:pixelsize=12"
 myModMask       = mod4Mask  -- Sets modkey to super/windows key
-myTerminal      = "xfce4-terminal"      -- Sets default terminal
+myTerminal      = "alacritty"      -- Sets default terminal
 myTextEditor    = "emacsclient -c"     -- Sets default text editor
 myBorderWidth   = 1         -- Sets border width for windows
 windowCount     = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
@@ -90,7 +90,7 @@ main = do
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = \x -> hPutStrLn xmproc0 x  >> hPutStrLn xmproc1 x
                         , ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]" -- Current workspace in xmobar
-                        , ppVisible = xmobarColor "#c3e88d" ""                -- Visible but not current workspace
+                        , ppVisible = xmobarColor "#788f56" ""                -- Visible but not current workspace
                         , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""   -- Hidden workspaces in xmobar
                         , ppHiddenNoWindows = xmobarColor "#F07178" ""        -- Hidden workspaces (no windows)
                         , ppTitle = xmobarColor "#d0d0d0" "" . shorten 80     -- Title of active window in xmobar
@@ -118,8 +118,9 @@ myStartupHook = do
           spawnOnce "nitrogen --restore &"
           spawnOnce "xcompmgr -f -n &"
           --spawnOnce "xrandr --output DVI-D-1 --left-of DVI-D-0"
-          spawnOnce "xinput set-prop 'Razer Razer DeathAdder' 'Coordinate Transformation Matrix' 0.3 0 0 0 0.3 0 0 0 1"
+          spawnOnce "xinput set-prop 'Razer Razer DeathAdder' 'Coordinate Transformation Matrix' 0.1 0 0 0 0.1 0 0 0 1"
           spawnOnce "setxkbmap -layout us -option compose:ralt"
+          spawnOnce "xsetroot -cursor_name left_ptr"
           setWMName "LG3D"
           --spawnOnce "exec /usr/bin/trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 15 --transparent true --alpha 0 --tint 0x292d3e --height 19 &"
           --spawnOnce "/home/dt/.xmonad/xmonad.start" -- Sets our wallpaper

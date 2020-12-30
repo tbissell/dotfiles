@@ -97,7 +97,7 @@ set wildmenu                            " better completion display
 set wildignore+=.hg,.git,.svn
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest
-set wildignore+=*.pyc
+set wildignore+=*.pyc,*/node_modules/*
 
 let loaded_matchparen = 1
 let perl_fold = 1
@@ -120,20 +120,23 @@ nmap <Leader>tn :tabnext<cr>
 nmap <Leader>tp :tabprev<cr>
 nmap <Leader>tc :tabnew<cr>
 
+" Quicker buffer switching
+nmap <Leader>bn :bnext<cr>
+nmap <Leader>bp :bprevious<cr>
+nmap <Leader>bl :ls<cr>
+
 " My own handy shortcuts
 nmap <Leader>t :terminal<cr>
-nmap <Leader>u :!perl ~/.vim/update-plugins.pl<cr>
 nmap <silent><leader>f :set number!<cr>:call FoldColumnToggle()<cr>
 nmap <Leader>ll :lopen<cr>
+
+vnoremap ;r :'<,'>terminal<cr>
 
 " Quick bc-based calc
 vnoremap ;bc "ey:call CalcBC()<cr>
 
-" Quicksave -- disabled, never use it
-" noremap <C-s> :update<CR>
-
-" Quick sort -- don't use it much, disabled
-"vnoremap <Leader>s :sort<cr>
+" Quick sort
+vnoremap <Leader>s :sort<cr>
 
 " Re-map snippets to C-l, YouCompleteMe uses Tab
 imap <C-l> <Plug>snipMateNextOrTrigger
@@ -143,10 +146,11 @@ smap <C-l> <Plug>snipMateNextOrTrigger
 vnoremap < <gv
 vnoremap > >gv
 
-" Focus folding
+" Focus folding -- folds all outside of cursor location
 nnoremap <leader>z zMzvzz
 
 " Quick function completion
+" shortcut for omni match of function and file
 inoremap <c-]> <c-x><c-]>
 inoremap <c-f> <c-x><c-f>
 
