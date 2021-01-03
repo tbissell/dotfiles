@@ -115,6 +115,9 @@ nmap <Leader>gd :Gdiff<cr>
 nmap <Leader>gl :copen<cr>:Glog<cr>
 nmap <Leader>gb :Gblame<cr>
 
+" Markdown preview using grip (`pip install grip`)
+nmap <Leader>om :call OpenMarkdownPreview()<cr>
+
 " Quick tab movement
 nmap <Leader>tn :tabnext<cr>
 nmap <Leader>tp :tabprev<cr>
@@ -345,6 +348,20 @@ function! CalcBC()
         echo "answer = ". answer
     endif
 endfunction
+
+function! OpenMarkdownPreview() abort
+    if exists('s:markdown_job_id') && job_status(s:markdown_job_id) == 'run'
+        call job_stop(s:markdown_job_id)
+        unlet s:markdown_job_id
+    endif
+    let available_port = system(
+      \ "losf -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1"
+      \ ) + 1
+    if available_port == 1 | let available_port = 40500 | endif
+    let s:markdown_job_id = job_start(["/bin/sh", "-c", "grip " .  shellescape(expand('%:p')) . " :" . available_port])
+    call system('xdg-open http://localhost:' . available_port)
+endfunction
+
 "{{{2 autos
 " Quick-edit w/ warning when swap exists
 "augroup NoSimultaneousEdits

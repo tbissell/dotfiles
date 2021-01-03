@@ -16,7 +16,7 @@
 |||
 |-|-|
 |Super-Return|Launch terminal|
-|Super-r|Run command  launcher|
+|Super-r|Run command launcher|
 |Super-f|Run file manager|
 |Super-shift-l|Run screen locker|
 
