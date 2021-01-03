@@ -8,13 +8,10 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'xolox/vim-misc'
-"Plugin 'xolox/vim-easytags'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/perlomni.vim'
-"Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'vim-airline/vim-airline',
 Plugin 'vim-airline/vim-airline-themes',
-"Plugin 'vim-scripts/ShowMarks'
 Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/syntastic'
 Plugin 'godlygeek/tabular'
@@ -28,22 +25,17 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'honza/vim-snippets'
-Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-speeddating'
-"Plugin 'jgdavey/tslime.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
-"Plugin 'leafgarland/typescript-vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'HerringtonDarkholme/yats'
 Plugin 'leafgarland/typescript-vim'
 
 call vundle#end()
-
-set runtimepath^=~/.vim/bundle/orgmodem
 
 " set airline theme
 let g:airline_theme='distinguished'
@@ -203,14 +195,6 @@ else
     hi FoldColumn guifg=cyan guibg=NONE
     hi FoldColumn ctermfg=cyan ctermbg=NONE
     hi Folded ctermbg=NONE ctermfg=white
-
-    " Fix showmarks colors
-    hi ShowMarksHLl ctermfg=white ctermbg=blue
-    hi ShowMarksHLu ctermfg=white ctermbg=blue
-    hi ShowMarksHLo ctermfg=white ctermbg=blue
-    hi ShowMarksHLm ctermfg=white ctermbg=blue
-
-    let showmarks_enable = 0
 endif
 
 " Highlight long line marker
@@ -251,14 +235,6 @@ let g:Powerline_theme = 'default'
 
 "{{{2 Taglist
 let Tlist_Use_Right_Window = 1
-
-"{{{2 orgmode
-
-" Set Todo color for orgmode
-highlight Todo ctermfg=yellow ctermbg=NONE
-
-" Extra todo states
-let g:org_todo_keywords = ['TODO(t)', 'STARTED(s)', 'WAITING(w)', '|', 'DONE(d)', 'REJECTED(r)']
 
 "{{{2 Easytags
 let g:easytags_dynamic_files = 1

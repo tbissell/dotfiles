@@ -29,11 +29,15 @@ Normal:
     <Leader>gc      - Git commit (fugitive)
     <Leader>gs      - Git status (fugitive)
     <Leader>gd      - Git diff (fugitive)
+    <Leader>gp      - Git push (fugitive)
+    <Leader>gd      - Git diff (fugitive)
+    <Leader>gl      - Git log (fugitive)
+    <Leader>gb      - Git blame (fugitive)
 
-    <Leader>t       - new tab
-    <Leader>tc      - new tab
-    <Leader>tn      - next tab
-    <Leader>tp      - previous tab
+    <Leader>om      - markdown preview using grip + xdg-open
+
+    <Leader>t       - open terminal
+    <Leader>st      - send line to terminal
 
     <Leader>f       - toggle fold column/gutter/etc
 
@@ -52,6 +56,8 @@ Visual:
     >               - indent selection and reselect
     ;bc             - send selection to bc, display calculated result
     <C-t>           - send selection to perltidy, replace with result
+    ;st             - send selection to terminal
+    ;r              - run selection in new terminal
 
 Insert:
 
@@ -99,13 +105,11 @@ There are numerous other options, but the above is enough for me
 
 ![ctrlp](https://raw.github.com/tbissell/dotvim/master/images/ctrlp.png)
 
-### EasyTags
+### vim-gutentags
 
 This plugin automates the update of your ctags data. There are no keybinds
 needed, simply having ctags installed, and opening files will update your
-tags file. If needed to be done on demand, the following can be run:
-
-    :UpdateTags
+tags file.
 
 ### NerdTree
 
@@ -125,9 +129,9 @@ To trigger omni completion:
 
     <C-x> <C-o>
 
-### Powerline
+### Airline
 
-Powerline is a nice update to the status bar. Newer versions depend on
+Airline is a nice update to the status bar. Newer versions depend on
 a couple things that are sometimes not available. The first is that it requires
 built-in python support for 2.6+. Most installations at least have this
 available.
@@ -135,19 +139,6 @@ available.
 The second part, is that it uses patched fonts. It will function without them,
 but does not look as nice. The fonts used can be found here:
 [Powerline Fonts](http://github.com/powerline/fonts)
-
-### ShowMarks
-
-Handy display when using the number column. In this configuration, it is
-disable by default, and will display on demand. The intention is a a quick
-reference for less used features in my own workflow, namely marks.
-
-    <Leader>mt      - Toggle on/off
-    <Leader>mo      - Force on
-    <Leader>mh      - clear marks on current line
-    <Leader>ma      - clear all marks in current buffer
-
-![showmarks](https://raw.github.com/tbissell/dotvim/master/images/showmarks.png)
 
 ### Surround
 
