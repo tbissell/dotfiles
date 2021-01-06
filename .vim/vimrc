@@ -34,6 +34,7 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'HerringtonDarkholme/yats'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'Raimondi/delimitMate'
 
 call vundle#end()
 
@@ -126,6 +127,10 @@ nmap <silent><leader>f :set number!<cr>:call FoldColumnToggle()<cr>
 nmap <Leader>ll :lopen<cr>
 
 vnoremap ;r :'<,'>terminal<cr>
+
+" Quick switch from horizontal/vertical split
+map <Leader>th <C-w>t<C-w>H
+map <Leader>tk <C-w>t<C-w>K
 
 " Quick bc-based calc
 vnoremap ;bc "ey:call CalcBC()<cr>
@@ -331,11 +336,11 @@ function! OpenMarkdownPreview() abort
         unlet s:markdown_job_id
     endif
     let available_port = system(
-      \ "losf -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1"
+      \ "lsof -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1"
       \ ) + 1
     if available_port == 1 | let available_port = 40500 | endif
     let s:markdown_job_id = job_start(["/bin/sh", "-c", "grip " .  shellescape(expand('%:p')) . " :" . available_port])
-    call system('xdg-open http://localhost:' . available_port)
+    call system('xdg-open http://localhost:' . available_port . ' &')
 endfunction
 
 "{{{2 autos
