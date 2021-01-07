@@ -42,6 +42,9 @@ call vundle#end()
 " set airline theme
 let g:airline_theme='distinguished'
 
+" matchit is included with vim, may as well load it
+packadd! matchit
+
 "{{{1 General Options
 autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
 set nocompatible
@@ -86,7 +89,7 @@ set showmatch                           " show matching braces
 set laststatus=2                        " always show status line
 
 set wildmenu                            " better completion display
-"set wildmode=list:longest
+set wildmode=longest,full
 
 set wildignore+=.hg,.git,.svn
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
@@ -230,8 +233,13 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "{{{1 Plugin settings
 "{{{2 Vifm
+" open in split embedded terminal
 let g:vifm_embed_term = 1
 let g:vifm_embed_split = 1
+
+" reference tree on startup
+let g:vifm_exec_args = '-c tree'
+
 
 "{{{2 Pathogen
 "call pathogen#infect()
