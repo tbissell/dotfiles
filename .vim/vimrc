@@ -35,6 +35,7 @@ Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'HerringtonDarkholme/yats'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Raimondi/delimitMate'
+Plugin 'vifm/vifm.vim'
 
 call vundle#end()
 
@@ -132,6 +133,9 @@ vnoremap ;r :'<,'>terminal<cr>
 map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
 
+" Enable a hotkey for using vifm as file selector
+nmap <Leader>e :EditVifm<cr>
+
 " Quick bc-based calc
 vnoremap ;bc "ey:call CalcBC()<cr>
 
@@ -225,6 +229,10 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "{{{1 Plugin settings
+"{{{2 Vifm
+let g:vifm_embed_term = 1
+let g:vifm_embed_split = 1
+
 "{{{2 Pathogen
 "call pathogen#infect()
 "call pathogen#helptags()

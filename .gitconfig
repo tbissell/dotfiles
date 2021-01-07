@@ -14,3 +14,5 @@
 
 [core]
     pager = less --quit-if-one-screen --no-init
+[pull]
+	rebase = false

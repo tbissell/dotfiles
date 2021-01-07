@@ -39,3 +39,11 @@
 |Super-b|Toggle panel|
 |Super-shift-n|Add new group|
 |Super-shift-r|Rename group|
+
+### Setup
+
+There is a general configuration script to initialize and update.
+
+```console
+./config.sh
+```
