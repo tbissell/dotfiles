@@ -92,7 +92,7 @@ git_clone() {
     local path=$2
 
     info "Cloning $git..."
-    $GIT clone "$git" "$path"
+    $GIT clone --depth 1 "$git" "$path"
     if [ "$?" -ne 0 ]; then
         error "Clone failed."
     fi
@@ -124,10 +124,22 @@ setup_awesome() {
 }
 
 setup_terminals() {
+    # grab powerline fonts
+    info "Installing powerline fonts..."
     do_git "https://github.com/powerline/fonts" "$HOME/.local/powerline-fonts"
     $HOME/.local/powerline-fonts/install.sh
 
-    # generally gnome-terminal (ubuntu patched) or xfce4-terminal
+    # grab nerd fonts some specific nerd fonts
+    for font in Hack FiraCode FiraMono Mononoki UbuntuMono LiberationMono; do
+        info "Installing $font Nerd Font..."
+        curl -OL# https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/$font.zip
+        unzip -o $font.zip -d $HOME/.local/share/fonts
+        rm -v $font.zip
+    done
+
+    # refresh font cache
+    info "Clearing font cache..."
+    fc-cache -f
 
     # Set up gnome-terminal (requires dconf)
     _setup_gnome_terminal;

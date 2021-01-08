@@ -36,6 +36,7 @@ Plugin 'HerringtonDarkholme/yats'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'vifm/vifm.vim'
+Plugin 'liuchengxu/vim-which-key'
 
 call vundle#end()
 
@@ -61,6 +62,7 @@ set foldcolumn=3                        " fold column width
 set foldmethod=manual                   " method for folks, I change this sometimes
 syn on                                  " Enable syntax highlighting
 set ai                                  " Enable auto-indent
+set timeoutlen=500                      " shorten command timeout
 
 set ts=4                                " set tabstop
 set softtabstop=4                       " tab size for functions
@@ -166,6 +168,9 @@ inoremap {<CR> {<CR>}<Esc>O
 " Clear matches
 noremap <leader><space> :noh<cr>
 
+" Enable vim-which-key
+nnoremap <silent> <leader> :WhichKey '\'<cr>
+
 " Quick-fix grep listing
 nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g **/*'<cr>:copen<cr>:cc<cr>
 
@@ -232,6 +237,9 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "{{{1 Plugin settings
+"{{{2 vim-which-key
+" Shows a emacs-style selector for leader keys
+
 "{{{2 Vifm
 " open in split embedded terminal
 let g:vifm_embed_term = 1
