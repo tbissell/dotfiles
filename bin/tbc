@@ -20,6 +20,18 @@ function buildit {
     esac
 }
 
+function core_syntax {
+    echo "Usage: $0 [info|install|remove|bench|update|build]"
+    echo
+    echo "info              display system information"
+    echo "install <pkg>     install <pkg>"
+    echo "remove <pkg>      remove <pkg>"
+    echo "bench             benchmark system via docker image"
+    echo "update            update the OS"
+    echo "build             <in progress>"
+    echo
+}
+
 case "$1" in
     cmd)
         echo 'cmd'
@@ -48,6 +60,6 @@ case "$1" in
         buildit "$*"
         ;;
     *)
-        echo 'syntax';
+        core_syntax
         ;;
 esac
