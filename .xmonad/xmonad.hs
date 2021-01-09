@@ -186,6 +186,9 @@ myKeys =
         , ("M-<Space>", sendMessage NextLayout)                              -- Switch to next layout
         , ("M-<Delete>", withFocused $ windows . W.sink)  -- Push floating window back to tile.
         , ("M-S-<Delete>", sinkAll)                  -- Push ALL floating windows back to tile.
+--     -- Scratchpads
+        , ("M-C-n", namedScratchpadAction myScratchPads "note")
+        , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
 -- 
 -- 
 --     -- Xmonad
@@ -384,12 +387,21 @@ floats     = renamed [Replace "floats"]   $ limitWindows 20 $ simplestFloat
 ------------------------------------------------------------------------
 
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
+                , NS "note" noteTerm (resource =? "note") manageNote
                 , NS "cmus" spawnCmus findCmus manageCmus  
                 ]
 
     where
-    spawnTerm  = myTerminal ++  " -n scratchpad"
+    -- -name is used in place of --class on some terminals
+    noteTerm   = myTerminal ++ " --class note -e $HOME/.vim/create_note.sh"
+    spawnTerm  = myTerminal ++ " --class scratchpad"
     findTerm   = resource =? "scratchpad"
+    manageNote = customFloating $ W.RationalRect l t w h
+                 where
+                 h = 0.66
+                 w = 0.5
+                 t = 0.165
+                 l = 0.25
     manageTerm = customFloating $ W.RationalRect l t w h
                  where
                  h = 0.9

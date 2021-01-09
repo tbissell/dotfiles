@@ -48,6 +48,7 @@ packadd! matchit
 
 "{{{1 General Options
 autocmd! bufwritepost .vimrc source % " Automatic reloading of .vimrc
+let g:which_key_map = {}
 set nocompatible
 filetype plugin indent on
 
@@ -105,6 +106,10 @@ let perl_fold = 1
 " loading for interfaces
 nmap <Leader>nt :NERDTree<cr>
 nmap <Leader>tl :TagbarToggle<cr>
+let g:which_key_map.n = { 'name': '+nerd-tree'}
+let g:which_key_map.n.t = 'open-nerd-tree'
+let g:which_key_map.t = { 'name': '+tag-list' }
+let g:which_key_map.t.l = 'open-tag-list'
 
 " fugitive shortcuts
 nmap <Leader>gc :Gcommit<cr>
@@ -113,33 +118,57 @@ nmap <Leader>gp :Gpush<cr>
 nmap <Leader>gd :Gdiff<cr>
 nmap <Leader>gl :copen<cr>:Glog<cr>
 nmap <Leader>gb :Gblame<cr>
+let g:which_key_map.g = { 'name': '+git' }
+let g:which_key_map.g.c = 'git-commit'
+let g:which_key_map.g.s = 'git-status'
+let g:which_key_map.g.p = 'git-push'
+let g:which_key_map.g.d = 'git-diff'
+let g:which_key_map.g.l = 'git-log'
+let g:which_key_map.g.b = 'git-blame'
 
 " Markdown preview using grip (`pip install grip`)
 nmap <Leader>om :call OpenMarkdownPreview()<cr>
+let g:which_key_map.o = { 'name': '+open' }
+let g:which_key_map.o.m = 'markdown-preview'
 
-" Quick tab movement
-nmap <Leader>tn :tabnext<cr>
-nmap <Leader>tp :tabprev<cr>
-nmap <Leader>tc :tabnew<cr>
+" Disable for now, I never use tabs
+" " Quick tab movement
+" nmap <Leader>tn :tabnext<cr>
+" nmap <Leader>tp :tabprev<cr>
+" nmap <Leader>tc :tabnew<cr>
+" let g:which_key_map.tn = 'tab-next'
+" let g:which_key_map.tp = 'tab-previous'
+" let g:which_key_map.tc = 'tab-create'
 
 " Quicker buffer switching
 nmap <Leader>bn :bnext<cr>
 nmap <Leader>bp :bprevious<cr>
 nmap <Leader>bl :ls<cr>
+let g:which_key_map.b = { 'name': '+buffer' }
+let g:which_key_map.b.n = 'buffer-next'
+let g:which_key_map.b.p = 'buffer-previous'
+let g:which_key_map.b.l = 'buffer-list'
 
 " My own handy shortcuts
 nmap <Leader>t :terminal<cr>
 nmap <silent><leader>f :set number!<cr>:call FoldColumnToggle()<cr>
 nmap <Leader>ll :lopen<cr>
+let g:which_key_map.t = 'terminal'
+let g:which_key_map.f = 'hide-fold-bar'
+let g:which_key_map.l = { 'name': '+list' }
+let g:which_key_map.l.l = 'open-location-list'
 
 vnoremap ;r :'<,'>terminal<cr>
 
 " Quick switch from horizontal/vertical split
 map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
+let g:which_key_map.th = 'change-split-vertical'
+let g:which_key_map.tk = 'change-split-horizontal'
 
 " Enable a hotkey for using vifm as file selector
 nmap <Leader>e :EditVifm<cr>
+let g:which_key_map.e = 'open-with-vifm'
 
 " Quick bc-based calc
 vnoremap ;bc "ey:call CalcBC()<cr>
@@ -157,6 +186,7 @@ vnoremap > >gv
 
 " Focus folding -- folds all outside of cursor location
 nnoremap <leader>z zMzvzz
+let g:which_key_map.z = 'focus-one-fold'
 
 " Quick function completion
 " shortcut for omni match of function and file
@@ -173,6 +203,7 @@ nnoremap <silent> <leader> :WhichKey '\'<cr>
 
 " Quick-fix grep listing
 nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g **/*'<cr>:copen<cr>:cc<cr>
+let g:which_key_map['/'] = 'vimgrep-last-search'
 
 " Quick fix list next/prev
 nnoremap <c-j> :cnext<cr>
@@ -180,6 +211,7 @@ nnoremap <c-k> :cprev<cr>
 
 " trailing whitespace wipe
 nnoremap <leader>w :%s/[ ]*$//<cr>:noh<cr>
+let g:which_key_map.w = 'rtrim-whitespace'
 
 " Run the file being edited
 nmap <leader>r :!./%<cr>
@@ -187,9 +219,12 @@ au BufNewFile,BufRead *.sh nmap <leader>r :execute Readshell("bash", expand("%")
 au BufNewFile,BufRead *.rb nmap <leader>r :execute Readshell("ruby", expand("%"))<cr>
 au BufNewFile,BufRead *.sh nmap <leader>R :execute '!bash '. expand("%")<cr>
 au BufNewFile,BufRead *.rb nmap <leader>R :execute '!ruby '. expand("%")<cr>
+let g:which_key_map.r = 'run-file'
 
 vnoremap ;st "cy:call TermSend()<cr>
 nnoremap <leader>st 0"cy$:call TermSend()<cr>
+let g:which_key_map.s = { 'name': '+send' }
+let g:which_key_map.s.t = 'send-terminal'
 
 " better regex's
 nnoremap / /\v
@@ -239,6 +274,10 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 "{{{1 Plugin settings
 "{{{2 vim-which-key
 " Shows a emacs-style selector for leader keys
+
+
+
+call which_key#register('\', "g:which_key_map")
 
 "{{{2 Vifm
 " open in split embedded terminal

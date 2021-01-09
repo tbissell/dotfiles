@@ -48,3 +48,12 @@ urxvt.scrollBar: false
 !urxvt.font: xft:Hack:size=9
 urxvt.font: xft:Liberation Mono for Powerline:size=9
 urxvt.letterSpace: -1
+
+/* Styling for note scratchpad in xmonad */
+note*depth: 32
+note*background: rgba:0000/0000/0200/d800
+note.scrollBar: false
+
+!urxvt.font: xft:Hack:size=9
+note.font: xft:Liberation Mono for Powerline:size=9
+note.letterSpace: -1
