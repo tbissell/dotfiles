@@ -4,6 +4,7 @@
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
+
 Plugin 'gmarik/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
@@ -230,6 +231,11 @@ let g:which_key_map.s.t = 'send-terminal'
 nnoremap / /\v
 vnoremap / /\v
 
+nnoremap <leader>do :DiffOrig<cr>
+let g:which_key_map.d = { 'name': '+diff' }
+let g:which_key_map.d.o = 'diff-orig'
+
+
 "{{{1 Color/UI options
 if has('gui_running')
     set guioptions-=T
@@ -330,6 +336,9 @@ endif
 let g:ctrlp_custom_ignore = 'node_modules'
 "{{{1 Helper functions
 "{{{2 functions
+" Handy diff to orig from builtin documentation
+command DiffOrig vert new | set bt=nofile | set bh=wipe | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+
 " disable auto tags for certain files
 augroup tagAug
     autocmd!
