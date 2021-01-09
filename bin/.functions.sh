@@ -23,6 +23,17 @@ DISTRO=""
 DISTRO_DESC=""
 DOCKER=""
 
+function check_cmd {
+    # determine if given command is available
+    CMD=$1
+    if [ "$(command -v "$CMD")x" != "x" ]; then
+        return
+    fi
+
+    error "command not found: $CMD\n"
+    exit 1;
+}
+
 # docker run -p 6667:6667 42wim/matterircd:latest -bind 0.0.0.0:6667 --mserver mm.sdagit.com
 function id_os {
     if [ ! -x "$(command -v lsb_release 2>/dev/null)" ]; then
@@ -41,7 +52,10 @@ function id_os {
         UPDATER="sudo apt-get upgrade"
         REMOVER="sudo apt-get remove -y"
     fi
-    if [ "$DISTRO" == "Arch" ] || [ "$DISTRO" == "ManjaroLinux" ] || [ "$DISTRO" == "ArcoLinux" ]; then
+    if [ "$DISTRO" == "Arch" ] || \
+       [ "$DISTRO" == "ManjaroLinux" ] || \
+       [ "$DISTRO" == "ArcoLinux" ] || \
+       [ "$DISTRO" == "Artix" ]; then
         INSTALLER="sudo pacman -S --noconfirm"
         UPDATER="sudo pacman -Syu"
         REMOVER="sudo pacman -R --noconfirm"
@@ -59,6 +73,9 @@ function id_os {
 }
 
 function system_info {
+    check_cmd "bc"
+    check_cmd "dmidecode"
+
     PROC_NAME="$(grep '^model name' /proc/cpuinfo|cut -d' ' -f3- |head -1)"
     PROC_CORES="$(grep -c '^processor' /proc/cpuinfo)";
     MEMORY=$(printf "%.2f GB" "$(echo "$(grep '^MemTotal' /proc/meminfo|awk '{print $2}')" / 1000 / 1000 | bc -l)")
@@ -79,7 +96,9 @@ function os_info {
     info "\tInstall program: $INSTALLER\n";
     info "\tRemove program: $REMOVER\n";
     info "\tUpdate program: $UPDATER\n";
-    info "\tDocker: $($DOCKER --version | sed 's/^.*version //')\n";
+    if [ "${DOCKER}x" != "x" ]; then
+        info "\tDocker: $($DOCKER --version | sed 's/^.*version //')\n";
+    fi
     info "\tShell: $($(getent passwd "$USER"|cut -d: -f7) --version|head -1)\n";
 }
 
@@ -115,7 +134,9 @@ function package_remove {
 
 function benchmark {
     info "Updating sysbench container...\n"
-    docker pull -q severalnines/sysbench
+    check_cmd "docker"
+
+    sudo docker pull -q severalnines/sysbench
 
     system_info
     echo
@@ -154,8 +175,6 @@ function benchmark {
         done
         echo
     done
-
-    #sysbench --test=cpu --cpu-max-prime=100000 run --num-threads=1 --max-requests=100
 }
 
 # Init section, validate sudo
