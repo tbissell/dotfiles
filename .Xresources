@@ -1,5 +1,5 @@
 ! special
-*.foreground:   #a8a19f
+*.foreground:   #c4c4c4
 *.background:   #1b1918
 *.cursorColor:  #a8a19f
 
@@ -32,7 +32,7 @@
 *.color14:      #AFD7D7
 
 ! white
-*.color7:       #949494
+*.color7:       #c4c4c4
 *.color15:      #FFFFFF
 
 Xft.dpi: 96
