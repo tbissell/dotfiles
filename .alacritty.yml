@@ -181,24 +181,25 @@ draw_bold_text_with_bright_colors: true
 
 colors:
     primary:
+        foreground: '#d4d4d4'
         background: '#000000'
     normal:
-        black:   '#1d1f21'
+        black:   '#000000'
         red:     '#d75f5f'
-        green:   '#00af00'
+        green:   '#87af5f'
         yellow:  '#af8700'
-        blue:    '#0087ff'
-        magenta: '#aa00aa'
-        cyan:    '#57d7ff'
-        white:   '#949494'
+        blue:    '#5f87af'
+        magenta: '#c48ec9'
+        cyan:    '#5fafaf'
+        white:   '#d4d4d4'
     bright:
         black:   '#585858'
         red:     '#ff5f00'
         green:   '#afff87'
         yellow:  '#d7af57'
-        blue:    '#00afff'
-        magenta: '#ff55ff'
-        cyan:    '#00ffff'
+        blue:    '#5f87d7'
+        magenta: '#c8acca'
+        cyan:    '#afd7d7'
         white:   '#ffffff'
 
 # Colors (Tomorrow Night)

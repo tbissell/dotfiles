@@ -322,6 +322,10 @@ nmap <C-c><C-c> <Plug>NormalModeSendToTmux
 let g:tslime_always_current_session = 1
 "{{{2 airline
 let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = ''
 "{{{2 ctrlp
 let g:ctrlp_custom_ignore = 'node_modules'
 "{{{1 Helper functions
