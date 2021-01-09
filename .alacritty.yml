@@ -181,7 +181,7 @@ draw_bold_text_with_bright_colors: true
 
 colors:
     primary:
-        foreground: '#c4c4c4'
+        foreground: '#d4d4d4'
         background: '#000000'
     normal:
         black:   '#000000'
@@ -191,7 +191,7 @@ colors:
         blue:    '#5f87af'
         magenta: '#c48ec9'
         cyan:    '#5fafaf'
-        white:   '#c4c4c4'
+        white:   '#d4d4d4'
     bright:
         black:   '#585858'
         red:     '#ff5f00'
