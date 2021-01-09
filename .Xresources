@@ -57,3 +57,12 @@ note.scrollBar: false
 !urxvt.font: xft:Hack:size=9
 note.font: xft:Liberation Mono for Powerline:size=9
 note.letterSpace: -1
+
+/* Styling for scratchpad terminal in xmonad */
+scratchpad*depth: 32
+scratchpad*background: rgba:0000/0000/0200/d800
+scratchpad.scrollBar: false
+
+!urxvt.font: xft:Hack:size=9
+scratchpad.font: xft:Liberation Mono for Powerline:size=9
+scratchpad.letterSpace: -1
