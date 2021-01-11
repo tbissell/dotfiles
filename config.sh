@@ -9,17 +9,17 @@
 #  - vifm
 #  - nitrogen
 #  - i3lock
-PROGRAMS_Debian="tmux vim vifm"
-PROGRAMS_Ubuntu="tmux vim vifm"
-PROGRAMS_ManjaroLinux="tmux vim vifm"
-PROGRAMS_Arch="tmux vim vifm"
-PROGRAMS_Gentoo="tmux vim vifm"
+export PROGRAMS_Debian="tmux vim vifm"
+export PROGRAMS_Ubuntu="tmux vim vifm"
+export PROGRAMS_ManjaroLinux="tmux vim vifm"
+export PROGRAMS_Arch="tmux vim vifm"
+export PROGRAMS_Gentoo="tmux vim vifm"
 
-if [ ! -x "$(which lsb_release 2>/dev/null)" ]; then
+if [ ! -x "$(command -v lsb_release)" ]; then
     # Arch is the only one so far that does not include lsb_release
-    [ -x "$(which pacman 2>/dev/null)" ] && sudo pacman -S --noconfirm lsb-release
+    [ -x "$(command -v pacman 2>/dev/null)" ] && sudo pacman -S --noconfirm lsb-release
     # Gentoo joins arch with in failure to include lsb_release
-    [ -x "$(which emerge 2>/dev/null)" ] && sudo emerge lsb-release
+    [ -x "$(command -v emerge 2>/dev/null)" ] && sudo emerge lsb-release
 
 fi
 
@@ -29,26 +29,26 @@ eval SELECTED="\$$SELECTED_PROGRAMS"
 
 install_programs() {
     for p in $SELECTED; do
-        if [ ! -x "$(which $p 2>/dev/null)" ]; then
+        if [ ! -x "$(command -v "$p" 2>/dev/null)" ]; then
             if [ "$DISTRO" == "Debian" ]; then
                 info "Installing $p..."
-                sudo apt-get install -y $p
+                sudo apt-get install -y "$p"
             fi
             if [ "$DISTRO" == "Ubuntu" ]; then
                 info "Installing $p..."
-                sudo apt-get install -y $p
+                sudo apt-get install -y "$p"
             fi
             if [ "$DISTRO" == "ManjaroLinux" ]; then
                 info "Installing $p..."
-                sudo pacman -S --noconfirm $p
+                sudo pacman -S --noconfirm "$p"
             fi
             if [ "$DISTRO" == "Arch" ]; then
                 info "Installing $p..."
-                sudo pacman -S --noconfirm $p
+                sudo pacman -S --noconfirm "$p"
             fi
             if [ "$DISTRO" == "Gentoo" ]; then
                 info "Installing $p..."
-                sudo emerge $p
+                sudo emerge "$p"
             fi
         fi
     done
@@ -56,9 +56,9 @@ install_programs() {
 
 # precheck stuff
 CMD_PATH="$(dirname "$(readlink -f "$0")")"
-GIT="$(which git)"
+GIT="$(command -v git)"
 
-[ ! -z "$GIT" ] || exit
+[ -n "$GIT" ] || exit
 
 # basic colors
 RED="\e[31m";
@@ -67,9 +67,9 @@ YEL="\e[33m";
 RST="\e[0m";
 
 # basic output handlers
-info()  { printf "[${GRN}info ${RST}]  $@\n"; }
-warn()  { printf "[${YEL}warn ${RST}]  $@\n"; }
-error() { printf "[${RED}error${RST}]  $@\n"; exit; }
+info()  { echo -e "[${GRN}info ${RST}] $*"; }
+warn()  { echo -e "[${YEL}warn ${RST}] $*"; }
+error() { echo -e "[${RED}error ${RST}] $*"; }
 
 do_git() {
     local git=$1
@@ -92,8 +92,7 @@ git_clone() {
     local path=$2
 
     info "Cloning $git..."
-    $GIT clone --depth 1 "$git" "$path"
-    if [ "$?" -ne 0 ]; then
+    if ! $GIT clone --depth 1 "$git" "$path"; then
         error "Clone failed."
     fi
 }
@@ -102,10 +101,11 @@ git_update() {
     local path=$1;
 
     info "Pulling $git..."
-    pushd "$path" 1>/dev/null && git pull && popd 1>/dev/null;
-    if [ "$?" -ne 0 ]; then
+    pushd "$path" 1>/dev/null || exit
+    if ! git pull; then
         error "Pull failed."
     fi
+    popd 1>/dev/null || exit
 }
 
 setup_zsh() {
@@ -117,6 +117,9 @@ setup_vim() {
     info "Running setup for vim..."
     "$CMD_PATH/.vim/setup.sh"
     [ -L "$CMD_PATH/.vimrc" ] || ln -sv .vim/vimrc "$CMD_PATH/.vimrc"
+
+    info "Updating plugins for vim..."
+    vim +PluginUpdate +qall
 }
 
 setup_awesome() {
@@ -127,13 +130,13 @@ setup_terminals() {
     # grab powerline fonts
     info "Installing powerline fonts..."
     do_git "https://github.com/powerline/fonts" "$HOME/.local/powerline-fonts"
-    $HOME/.local/powerline-fonts/install.sh
+    "$HOME/.local/powerline-fonts/install.sh"
 
     # grab nerd fonts some specific nerd fonts
     for font in Hack FiraCode FiraMono Mononoki UbuntuMono LiberationMono; do
         info "Installing $font Nerd Font..."
         curl -OL# https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/$font.zip
-        unzip -o $font.zip -d $HOME/.local/share/fonts
+        unzip -q -o $font.zip -d "$HOME/.local/share/fonts"
         rm -v $font.zip
     done
 
@@ -147,7 +150,7 @@ setup_terminals() {
 
 _setup_gnome_terminal() {
     # Make sure it's available
-    if [ -x "$(which gnome-terminal)" ] && [ -x "$(which dconf)" ]; then
+    if [ -x "$(command -v gnome-terminal)" ] && [ -x "$(command -v dconf)" ]; then
         info "Setting up gnome-terminal..."
         KEY="/org/gnome/terminal/legacy/profiles:/"
         # Get profile
