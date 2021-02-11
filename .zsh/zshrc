@@ -128,5 +128,5 @@ export GITLAB_API_PRIVATE_TOKEN="birE8UKu1LkQ8gF-HZ6r"
 
 # show system info if available
 if [ -x  "$(command -v inxi)" ]; then
-    command inxi -v1 -sR
+    command inxi -v1 -sR -c14
 fi
