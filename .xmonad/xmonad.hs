@@ -76,7 +76,7 @@ myFont          = "xft:Liberation Mono for Powerline:regular:pixelsize=12"
 myModMask       = mod4Mask  -- Sets modkey to super/windows key
 myTerminal      = "alacritty"      -- Sets default terminal
 myTextEditor    = "emacsclient -c"     -- Sets default text editor
-myBorderWidth   = 1         -- Sets border width for windows
+myBorderWidth   = 2         -- Sets border width for windows
 windowCount     = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
 main = do
@@ -97,7 +97,7 @@ main = do
                         , ppSep =  "<fc=#9AEDFE> : </fc>"                     -- Separators in xmobar
                         , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
                         , ppExtras  = [windowCount]                           -- # of windows current workspace
-                        , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+                        , ppOrder = \(ws:l:t:ex) -> [ws,l]++ex++[t]
                         }
         , modMask            = myModMask
         , terminal           = myTerminal

@@ -38,6 +38,7 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'vifm/vifm.vim'
 Plugin 'liuchengxu/vim-which-key'
+Plugin 'ap/vim-css-color'
 
 call vundle#end()
 
@@ -209,6 +210,9 @@ let g:which_key_map['/'] = 'vimgrep-last-search'
 " Quick fix list next/prev
 nnoremap <c-j> :cnext<cr>
 nnoremap <c-k> :cprev<cr>
+
+" Quick pretty print json
+nnoremap <leader>pp :enew <bar> r!python -m json.tool #<cr>:set ft=json<cr>:setl buftype=nofile bufhidden=wipe nobuflisted<cr>
 
 " trailing whitespace wipe
 nnoremap <leader>w :%s/[ ]*$//<cr>:noh<cr>
