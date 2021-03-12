@@ -9,11 +9,11 @@
 #  - vifm
 #  - nitrogen
 #  - i3lock
-export PROGRAMS_Debian="tmux vim vifm"
-export PROGRAMS_Ubuntu="tmux vim vifm"
-export PROGRAMS_ManjaroLinux="tmux vim vifm"
-export PROGRAMS_Arch="tmux vim vifm"
-export PROGRAMS_Gentoo="tmux vim vifm"
+export PROGRAMS_Debian="curl git zsh tmux vim vifm"
+export PROGRAMS_Ubuntu="curl git zsh tmux vim vifm"
+export PROGRAMS_ManjaroLinux="curl git zsh tmux vim vifm"
+export PROGRAMS_Arch="curl git zsh tmux vim vifm"
+export PROGRAMS_Gentoo="curl git zsh tmux vim vifm"
 
 if [ ! -x "$(command -v lsb_release)" ]; then
     # Arch is the only one so far that does not include lsb_release
