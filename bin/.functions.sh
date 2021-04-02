@@ -132,6 +132,18 @@ function package_remove {
     $REMOVER "$1"
 }
 
+function disk_benchmark {
+    ptestf "Running read test: "
+    RBENCH=$(fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json)
+    echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
+    rm -f seqread.*
+
+    ptestf "Running write test: "
+    WBENCH=$(fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json)
+    echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
+    rm -f seqwrite.*
+}
+
 function benchmark {
     info "Updating sysbench container...\n"
     check_cmd "docker"
@@ -145,6 +157,8 @@ function benchmark {
 
     threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     bsizes="1K 64K 256K 512K 1M"
+
+    disk_benchmark;
 
     ptestf "CPU Int (threads:events/s):"
     for thread in $threads; do
