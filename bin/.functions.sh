@@ -133,13 +133,23 @@ function package_remove {
 }
 
 function disk_benchmark {
-    ptestf "Running read test: "
+    ptestf "Running read test (bs 128k): "
     RBENCH=$(fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json)
     echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
     rm -f seqread.*
 
-    ptestf "Running write test: "
+    ptestf "Running write test (bs 128k): "
     WBENCH=$(fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json)
+    echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
+    rm -f seqwrite.*
+
+    ptestf "Running read test (bs 256k): "
+    RBENCH=$(fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json)
+    echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
+    rm -f seqread.*
+
+    ptestf "Running write test (bs 256k): "
+    WBENCH=$(fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json)
     echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
     rm -f seqwrite.*
 }
