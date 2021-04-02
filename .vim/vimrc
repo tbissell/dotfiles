@@ -282,6 +282,8 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "{{{1 Plugin settings
+"{{{2 snipmate
+let g:snipMate = { 'snippet_version': 1 }
 "{{{2 vim-which-key
 " Shows a emacs-style selector for leader keys
 
