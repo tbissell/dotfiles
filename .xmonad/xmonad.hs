@@ -69,6 +69,11 @@ import XMonad.Layout.IndependentScreens
     -- Prompts
 import XMonad.Prompt (defaultXPConfig, XPConfig(..), XPPosition(Top), Direction1D(..))
 
+    -- keys
+import Graphics.X11.ExtraTypes.XF86 (xF86XK_AudioMute,
+                                     xF86XK_AudioRaiseVolume,
+                                     xF86XK_AudioLowerVolume)
+
 ------------------------------------------------------------------------
 ---CONFIG
 ------------------------------------------------------------------------
@@ -122,7 +127,7 @@ myStartupHook = do
           spawnOnce "setxkbmap -layout us -option compose:ralt"
           spawnOnce "xsetroot -cursor_name left_ptr"
           setWMName "LG3D"
-          --spawnOnce "exec /usr/bin/trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 15 --transparent true --alpha 0 --tint 0x292d3e --height 19 &"
+          spawnOnce "exec /usr/bin/trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 15 --transparent true --alpha 0 --tint 0x292d3e --height 19 --distancefrom right --distance 410 &"
           --spawnOnce "/home/dt/.xmonad/xmonad.start" -- Sets our wallpaper
 
 ------------------------------------------------------------------------
@@ -189,6 +194,9 @@ myKeys =
 --     -- Scratchpads
         , ("M-C-n", namedScratchpadAction myScratchPads "note")
         , ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
+
+        , ("<XF86AudioLowerVolume>", spawn "pulsemixer --change-volume -5")
+        , ("<XF86AudioRaiseVolume>", spawn "pulsemixer --change-volume +5")
 -- 
 -- 
 --     -- Xmonad
@@ -344,7 +352,7 @@ xmobarEscape = concatMap doubleLts
 
 myWorkspaces :: [String]
 myWorkspaces = clickable . (map xmobarEscape) 
-               $ [ "1:dev", "2:www", "3:sys", "4:chat", "5:mus", "6:scratch"]
+               $ [ "1:dev", "2:www", "3:sys", "4:dev1", "5:dev2", "6:scratch", "7:mm", "8:discord"]
   where                                                                      
         clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
                       (i,ws) <- zip [1..9] l,                                        
