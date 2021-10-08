@@ -100,6 +100,7 @@ set wildignore+=.hg,.git,.svn
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
 set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest
 set wildignore+=*.pyc,*/node_modules/*
+set wildignore+="*/vendor/*"
 
 let loaded_matchparen = 1
 let perl_fold = 1
@@ -115,7 +116,7 @@ let g:which_key_map.t.l = 'open-tag-list'
 
 " fugitive shortcuts
 nmap <Leader>gc :Gcommit<cr>
-nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gs :Git<cr>
 nmap <Leader>gp :Gpush<cr>
 nmap <Leader>gd :Gdiff<cr>
 nmap <Leader>gl :copen<cr>:Glog<cr>
@@ -220,10 +221,12 @@ let g:which_key_map.w = 'rtrim-whitespace'
 
 " Run the file being edited
 nmap <leader>r :!./%<cr>
-au BufNewFile,BufRead *.sh nmap <leader>r :execute Readshell("bash", expand("%"))<cr>
-au BufNewFile,BufRead *.rb nmap <leader>r :execute Readshell("ruby", expand("%"))<cr>
-au BufNewFile,BufRead *.sh nmap <leader>R :execute '!bash '. expand("%")<cr>
-au BufNewFile,BufRead *.rb nmap <leader>R :execute '!ruby '. expand("%")<cr>
+" au BufNewFile,BufRead *.sh nmap <leader>R :execute Readshell("bash", expand("%"))<cr>
+" au BufNewFile,BufRead *.rb nmap <leader>R :execute Readshell("ruby", expand("%"))<cr>
+" au BufNewFile,BufRead *.sh nmap <leader>r :execute '!bash '. expand("%")<cr>
+" au BufNewFile,BufRead *.rb nmap <leader>r :execute '!ruby '. expand("%")<cr>
+au BufNewFile,BufRead *.py nmap <leader>r :terminal python3 %<cr>
+au BufNewFile,BufRead *.php nmap <leader>r :terminal php %<cr>
 let g:which_key_map.r = 'run-file'
 
 vnoremap ;st "cy:call TermSend()<cr>
@@ -321,13 +324,14 @@ let g:easytags_dynamic_files = 1
 let g:easytags_suppress_ctags_warning = 1
 "{{{2 Gutentags
 let g:gutentags_define_advanced_commands = 1
-let g:gutentags_ctags_exclude = ['node_modules']
+let g:gutentags_ctags_exclude = ['node_modules', 'vendor']
 "{{{2 Syntastic
 let g:syntastic_perl_checkers = ['perl', 'podchecker']
 let g:syntastic_enable_perl_checker = 1
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
+let g:syntastic_python_python_exec = 'python3'
 "{{{2 airline
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -335,7 +339,7 @@ if !exists('g:airline_symbols')
 endif
 " let g:airline_symbols.linenr = ''
 "{{{2 ctrlp
-let g:ctrlp_custom_ignore = 'node_modules'
+let g:ctrlp_custom_ignore = ['node_modules', 'vendor']
 "{{{1 Helper functions
 "{{{2 functions
 " Handy diff to orig from builtin documentation
@@ -435,6 +439,7 @@ au BufRead,BufNewFile *.scss set filetype=scss
 au BufRead,BufNewFile *.js.erb set filetype=eruby.js
 au BufRead,BufNewFile *.html.erb set filetype=eruby.html
 au BufRead,BufNewFile *.ts set filetype=typescript
+au BufRead,BufNewFile *.yaml set sw=2 sts=2 ts=2
 "{{{2 Perl
 au FileType perl setlocal keywordprg=perldoc\ -T\ -f
 
