@@ -165,22 +165,22 @@ function disk_benchmark {
     ptestf "    Running read test (bs 128k): "
     RBENCH=$(sudo fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
-    rm -f seqread.*
+    sudo rm -f ${path}seqread.*
 
     ptestf "    Running write test (bs 128k): "
     WBENCH=$(sudo fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
-    rm -f seqwrite.*
+    sudo rm -f ${path}seqwrite.*
 
     ptestf "    Running read test (bs 256k): "
     RBENCH=$(sudo fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
-    rm -f seqread.*
+    sudo rm -f ${path}seqread.*
 
     ptestf "    Running write test (bs 256k): "
     WBENCH=$(sudo fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
-    rm -f seqwrite.*
+    sudo rm -f ${path}seqwrite.*
 }
 
 function benchmark {
