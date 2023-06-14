@@ -132,26 +132,55 @@ function package_remove {
     $REMOVER "$1"
 }
 
+function discover_disks {
+    FSINFO=$(df -x tmpfs -x devtmpfs -x squashfs -Tl |grep -v ^Filesystem| awk '{ print $1 "," $2 "," $5 "," $7 }')
+    info "Searching devices:\n"
+    for x in $FSINFO; do
+        IFS="," read -r -a ary <<< $x
+        mount=${ary[0]}
+        mounttype=${ary[1]}
+        mountfree=${ary[2]}
+        mountpath=${ary[3]}
+
+        # SSD check
+        rotcheck=$(lsblk -o rota $mount --noheadings)
+        if [ $rotcheck -eq 0 ]; then
+            disktype="ssd"
+        else
+            disktype="hdd"
+        fi
+
+        if [ $mountfree -lt 4194304 ]; then
+            warn; printf "%s (%s): %-30s %4dGB free   mount: %s\n" "Insufficient space" $disktype $mount $(($mountfree / 1024 / 1024)) $mountpath
+        else
+            info; printf "%s (%s): %-30s %4dGB free   mount: %s\n" "Device" $disktype $mount $(($mountfree / 1024 / 1024)) $mountpath
+            disk_benchmark $mountpath
+        fi
+    done
+}
+
 function disk_benchmark {
-    ptestf "Running read test (bs 128k): "
-    RBENCH=$(fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json)
+    path=$1
+
+    ptestf "    Running read test (bs 128k): "
+    RBENCH=$(sudo fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
-    rm -f seqread.*
+    sudo rm -f ${path}seqread.*
 
-    ptestf "Running write test (bs 128k): "
-    WBENCH=$(fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json)
+    ptestf "    Running write test (bs 128k): "
+    WBENCH=$(sudo fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=128k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
-    rm -f seqwrite.*
+    sudo rm -f ${path}seqwrite.*
 
-    ptestf "Running read test (bs 256k): "
-    RBENCH=$(fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json)
+    ptestf "    Running read test (bs 256k): "
+    RBENCH=$(sudo fio --name=seqread --rw=read --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600  --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$RBENCH"|jq '.jobs[0].read.bw') / 1000)) "MB/s, " $(echo "$RBENCH"|jq '.jobs[0].read.iops') " IOPS"
-    rm -f seqread.*
+    sudo rm -f ${path}seqread.*
 
-    ptestf "Running write test (bs 256k): "
-    WBENCH=$(fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json)
+    ptestf "    Running write test (bs 256k): "
+    WBENCH=$(sudo fio --name=seqwrite --rw=write --direct=1 --ioengine=libaio --bs=256k --numjobs=4 --size=256M --runtime=600 --group_reporting --output-format=json --directory=$path)
     echo $(($(echo "$WBENCH"|jq '.jobs[0].write.bw') / 1000)) "MB/s, " $(echo "$WBENCH"|jq '.jobs[0].write.iops') " IOPS"
-    rm -f seqwrite.*
+    sudo rm -f ${path}seqwrite.*
 }
 
 function benchmark {
@@ -168,7 +197,8 @@ function benchmark {
     threads="1 $(grep -c '^processor' /proc/cpuinfo) $((4 * $(grep -c '^processor' /proc/cpuinfo)))"
     bsizes="1K 64K 256K 512K 1M"
 
-    disk_benchmark;
+    discover_disks
+    return
 
     ptestf "CPU Int (threads:events/s):"
     for thread in $threads; do
